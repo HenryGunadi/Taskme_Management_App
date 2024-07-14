@@ -1,0 +1,21 @@
+import {Routes, Route, Navigate} from 'react-router-dom';
+import Login from './components/Login';
+import Register from './components/Register';
+import Dashboard from './components/Dashboard';
+
+export const token: string | null = localStorage.getItem('token');
+
+function App() {
+	return (
+		<div className="w-screen h-screen">
+			<Routes>
+				<Route path="/" element={<Navigate to="/login" />} />
+				<Route path="/login" element={<Login />} />
+				<Route path="/register" element={<Register />} />
+				<Route path="/dashboard/*" element={<Dashboard />} />
+			</Routes>
+		</div>
+	);
+}
+
+export default App;
