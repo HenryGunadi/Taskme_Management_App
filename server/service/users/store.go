@@ -33,7 +33,6 @@ func (s *Store) GetUserByEmail(ctx context.Context, email string) (string, *type
 	iter := s.fireStoreClient.Collection("users").Where("Email", "==", email).Limit(1).Documents(ctx)
 	// iterator stop when function exits	
 	defer iter.Stop()
-
 	
 	doc, err := iter.Next()
 	if err == iterator.Done {
@@ -105,6 +104,22 @@ func (s *Store) ChangeUserSettings(ctx context.Context, userID string, user *typ
 	}
 
 	return nil
+}
+
+func (s *Store) GetUserByID(ctx context.Context, userID string) (*types.User, error) {
+	docRef := s.fireStoreClient.Collection("users").Doc(userID)
+
+	doc, err := docRef.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	user := new(types.User)
+	if err := doc.DataTo(user); err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 

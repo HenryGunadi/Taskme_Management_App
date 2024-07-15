@@ -26,6 +26,7 @@ func (h *Handler) RegisteredRoutes(router *mux.Router) {
 	router.HandleFunc("/register", h.handleRegister).Methods("POST")
 	router.HandleFunc("/login", h.handleLogin).Methods("POST")
 	router.HandleFunc("/settings", h.handleUserSettings).Methods("POST")
+	router.HandleFunc("/user", h.handleFetchUser).Methods("GET")
 }
 
 func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
@@ -116,7 +117,7 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 		"lastName": user.LastName,
 		"userID": userId,
 		"email": user.Email,
-		"password": user.Password,
+		"bio": user.Bio,
 	})
 }
 
@@ -146,12 +147,15 @@ func (h *Handler) handleUserSettings(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newPassHashed, err := auth.HashedPassword(payload.Password)
-	if err != nil {
-		utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("hashing new password error : %v", err))
+	if payload.Password != "" {
+		newPassHashed, err := auth.HashedPassword(payload.Password)
+		if err != nil {
+			utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("hashing new password error : %v", err))
+		}
+		
+		payload.Password = newPassHashed
 	}
 
-	payload.Password = newPassHashed
 
 	err = h.store.ChangeUserSettings(ctx, userIDStr, &payload)
 	if err != nil {
@@ -162,4 +166,36 @@ func (h *Handler) handleUserSettings(w http.ResponseWriter, r *http.Request) {
 	utils.WriteJSON(w, http.StatusOK, map[string]bool{
 		"status": true,
 	})
-} 
+}
+
+func (h *Handler) handleFetchUser(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+
+	// get token from header request
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user is not authorized"))
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	userIDStr, err := auth.ValidateUser(token)
+	if err != nil {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user is not authorized : %v", err))
+		return
+	}
+
+	user, err := h.store.GetUserByID(ctx, userIDStr)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("could not get user data : %v", err))
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, map[string]string{
+		"firstName": user.FirstName,
+		"lastName": user.LastName,
+		"email": user.Email,
+		"bio": user.Bio,
+	})
+}

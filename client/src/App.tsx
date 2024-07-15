@@ -3,8 +3,6 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 
-export const token: string | null = localStorage.getItem('token');
-
 function App() {
 	return (
 		<div className="w-screen h-screen">

@@ -10,6 +10,7 @@ type UserStore interface {
 	CheckUserExists(email string) (bool, error)
 	UploadImage(ctx context.Context, upload Upload) error
 	ChangeUserSettings(ctx context.Context, userID string, user *User) error
+	GetUserByID(ctx context.Context, userID string) (*User, error)
 }
 
 type UploadStore interface {

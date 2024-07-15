@@ -5,12 +5,6 @@ export interface RegisterUserPayload {
 	password: string;
 }
 
-// export interface User {
-// 	id: number;
-// 	username: string;
-// 	email: number;
-// }
-
 export interface User {
 	firstName: string;
 	lastName: string;
@@ -45,13 +39,6 @@ export interface changeSettingsPayload {
 	bio: string;
 }
 
-export interface UserInformation {
-	email: string;
-	firstName: string;
-	lastName: string;
-	bio: string;
-}
-
 export interface AlertInterface {
 	isLoading: boolean;
 	isSuccess: boolean | null;
@@ -73,6 +60,7 @@ export interface ValidateMsgInterface {
 
 export interface UserSettingsCtx {
 	dataSettings: User;
-	handleInputSettings: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	handleInputSettings: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 	handlePostSettings: () => Promise<void>;
+	isChanged: boolean;
 }

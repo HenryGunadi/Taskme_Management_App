@@ -6,29 +6,18 @@ import UserProfile from './UserProfile';
 import {useAuth} from '../auth/Authentication';
 import {backendUrl} from './Login';
 import axios from 'axios';
-import {token} from '../App';
-import {UserInformation, AlertInterface, AlertContext} from './Types';
+import {AlertInterface, AlertContext} from './Types';
 import {Alert, LinearProgress} from '@mui/material';
 
 export interface ImgUrlInterface {
 	imgFileUrl: string;
 }
 
+export const token = localStorage.getItem('token') || '';
+
 export const commandContext = createContext<ContextProps | undefined>(undefined);
 export const imgUrlContext = createContext<ImgUrlInterface | undefined>(undefined);
 export const alertContext = createContext<AlertContext | undefined>(undefined);
-
-const email: string | null = localStorage.getItem('email');
-const firstName: string | null = localStorage.getItem('firstName');
-const lastName: string | null = localStorage.getItem('lastName');
-const bio: string | null = localStorage.getItem('bio');
-
-export const UserInfo: UserInformation = {
-	email: !email ? '' : email,
-	firstName: !firstName ? '' : firstName,
-	lastName: !lastName ? '' : lastName,
-	bio: !bio ? '' : bio,
-};
 
 export type ContextProps = {
 	isCommand: boolean;
@@ -84,6 +73,7 @@ const Dashboard: React.FC = () => {
 		alertMsg: '',
 	});
 
+	// alert
 	useEffect(() => {
 		if (alert.isSuccess == true || alert.isSuccess == false) {
 			const alertDuration = setTimeout(() => {
@@ -105,6 +95,30 @@ const Dashboard: React.FC = () => {
 			alertMsg: msg,
 		}));
 	};
+
+	// fetch user data
+	useEffect(() => {
+		const fetchUserData = async () => {
+			try {
+				const response = await axios.get(`${backendUrl}/user`, {
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json',
+					},
+				});
+				if (response.status == 200 && response.data) {
+					console.log('user data : ', response.data);
+					localStorage.setItem('firstName', response.data.firstName);
+					localStorage.setItem('lastName', response.data.lastName);
+					localStorage.setItem('email', response.data.email);
+					localStorage.setItem('bio', response.data.bio);
+				}
+			} catch (err) {
+				console.error('error fetching user data : ', err);
+			}
+		};
+		fetchUserData();
+	}, []);
 
 	console.log('loading : ', alert.isLoading);
 

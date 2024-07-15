@@ -1,11 +1,11 @@
-import React, {createContext, useState} from 'react';
+import React, {createContext, useState, useEffect, useContext} from 'react';
 import {Route, Routes, useNavigate} from 'react-router-dom';
 import ProfileSettings from './ProfileSettings';
 import UserPass from './UserPass';
-import {UserRoutes, User, UserSettingsCtx} from './Types';
+import {UserRoutes, User, UserSettingsCtx, AlertContext} from './Types';
 import axios from 'axios';
 import {backendUrl} from './Login';
-import {token} from '../App';
+import {alertContext, token} from './Dashboard';
 
 export interface FileInterface {
 	togglePreview: (url: string) => void;
@@ -16,6 +16,10 @@ export const FileUploadContext = createContext<FileInterface | null>(null);
 export const UpdateUserSettingCtx = createContext<UserSettingsCtx | null>(null);
 
 const UserProfile: React.FC = () => {
+	// use context
+	const {toggleAlert} = useContext(alertContext) as AlertContext;
+
+	// simple toggle image preview state
 	const [imgFilePreview, setIsImgFilePreview] = useState<string | null>(null);
 	const togglePreview = (url: string) => {
 		setIsImgFilePreview(url);
@@ -37,7 +41,7 @@ const UserProfile: React.FC = () => {
 		{
 			route: 'notifications',
 		},
-	];
+	]; // routes in user route
 
 	const [dataSettings, setDataSettings] = useState<User>({
 		firstName: '',
@@ -45,17 +49,32 @@ const UserProfile: React.FC = () => {
 		password: '',
 		email: '',
 		bio: '',
-	});
+	}); // use state for data settings
 
-	const handleInputSettings = (e: React.ChangeEvent<HTMLInputElement>) => {
+	useEffect(() => {
+		const storedSettings = {
+			firstName: localStorage.getItem('firstName') || '',
+			lastName: localStorage.getItem('lastName') || '',
+			email: localStorage.getItem('email') || '',
+			bio: localStorage.getItem('bio') || '',
+		};
+		setDataSettings((prevSettings) => ({...prevSettings, ...storedSettings}));
+	}, []);
+
+	const [isChanged, setIsChanged] = useState<boolean>(false); // toggle save changes button
+
+	const handleInputSettings = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const {name, value} = e.target;
 		setDataSettings((prev) => ({
 			...prev,
 			[name]: value,
 		}));
-	};
+
+		setIsChanged(true);
+	}; // handle input on change
 
 	const handlePostSettings = async () => {
+		toggleAlert(null, '', true);
 		try {
 			const response = await axios.post(`${backendUrl}/settings`, dataSettings, {
 				headers: {
@@ -65,11 +84,20 @@ const UserProfile: React.FC = () => {
 			});
 			if (response.status === 200) {
 				console.log('changing user setting response : ', response.data);
+				// Update localStorage with new settings
+				localStorage.setItem('firstName', dataSettings.firstName);
+				localStorage.setItem('lastName', dataSettings.lastName);
+				localStorage.setItem('email', dataSettings.email);
+				localStorage.setItem('bio', dataSettings.bio);
 			}
 		} catch (err) {
 			console.error('error changing user settings : ', err);
+			toggleAlert(false, 'Something went wrong', false);
+		} finally {
+			setIsChanged(false);
+			toggleAlert(true, 'Changes saved', false);
 		}
-	};
+	}; // handle submit changes
 
 	return (
 		<FileUploadContext.Provider value={{togglePreview, imgFilePreview}}>
@@ -110,7 +138,7 @@ const UserProfile: React.FC = () => {
 					</div>
 
 					{/* main settings */}
-					<UpdateUserSettingCtx.Provider value={{dataSettings, handleInputSettings, handlePostSettings}}>
+					<UpdateUserSettingCtx.Provider value={{dataSettings, handleInputSettings, handlePostSettings, isChanged}}>
 						<div className="bg-slate-50 px-8 py-6 w-4/5 ml-4 flex font-normal text-sm text-slate-900 tracking-wide rounded-2xl">
 							<Routes>
 								<Route path="/profile" element={<ProfileSettings />} />

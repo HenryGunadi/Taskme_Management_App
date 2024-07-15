@@ -17,7 +17,7 @@ const Login: React.FC = () => {
 	};
 
 	const [isLoginFailed, setIsLoginFailed] = useState<boolean | null>(null);
-	const [loading, setLoading] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(false); // loading UI
 
 	const [loginPayload, setLoginPayload] = useState<LoginUserPayload>({
 		email: '',
@@ -36,16 +36,8 @@ const Login: React.FC = () => {
 		try {
 			const response = await axios.post(`${backendUrl}/login`, loginPayload);
 			const token = response.data.token;
-			const userID = response.data.userID;
-			const firstName = response.data.firstName;
-			const lastName = response.data.lastName;
-			const email = response.data.email;
 			if (token) {
 				localStorage.setItem('token', token);
-				localStorage.setItem('userID', userID);
-				localStorage.setItem('firstName', firstName);
-				localStorage.setItem('lastName', lastName);
-				localStorage.setItem('email', email);
 				console.log('Login successful: ', response.data);
 				navigateToHome();
 			} else {
@@ -75,6 +67,10 @@ const Login: React.FC = () => {
 
 		return () => clearTimeout(showAlert);
 	}, [isLoginFailed]);
+
+	useEffect(() => {
+		localStorage.setItem('passwordLen', String(loginPayload.password.length));
+	}, [handleLogin]);
 
 	return (
 		<div className="relative w-screen h-screen flex items-center justify-center">
