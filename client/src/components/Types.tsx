@@ -1,3 +1,5 @@
+import {ChangeEvent} from 'react';
+
 export interface RegisterUserPayload {
 	firstName: string;
 	lastName: string;
@@ -45,9 +47,29 @@ export interface AlertInterface {
 	alertMsg: string;
 }
 
-export interface AlertContext {
+export interface DashboardContextType {
+	isCommand: boolean;
+	toggleCommand: () => void;
+	toggleOffCommand: () => void;
+	toggleAddTask: (priority: string | null) => void;
 	toggleAlert: (success: boolean | null, msg: string, loading: boolean) => void;
-}
+	imgFileUrl: string;
+	handleInputs: (e: ChangeEvent<HTMLInputElement>) => void;
+	handlePopOver: (value: string) => void;
+	handleCalendar: (value: number) => void;
+	handleTextArea: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+	submitTask: boolean;
+	toggleOffAddTask: () => void;
+	priority: string | null;
+	task: TaskDataInterface;
+	handleSetSubmitTask: () => void;
+	toggleEdited: (data: TaskDataFetch) => void;
+	handleSetTaskDetails: (data: TaskDataFetch[]) => void;
+	taskDetails: TaskDataFetch[] | null;
+	toggleCheckEdited: (state: boolean) => void;
+	edited: boolean;
+	toggleEditUi: () => void;
+} //
 
 export interface UserRoutes {
 	route: string;
@@ -63,4 +85,59 @@ export interface UserSettingsCtx {
 	handleInputSettings: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 	handlePostSettings: () => Promise<void>;
 	isChanged: boolean;
+}
+
+export interface TaskDataInterface {
+	title: string;
+	description: string;
+	priority: string | null;
+	dueDate: number;
+	status: boolean | null;
+}
+
+export interface TaskDataFetch {
+	taskID: string;
+	title: string;
+	description: string;
+	priority: string | null;
+	dueDate: number;
+	status: boolean | null;
+}
+
+export interface TaskContainerProps {
+	data: TaskDataFetch;
+}
+
+export type FinishTaskProps = {
+	taskID: string;
+};
+
+export type TaskType = {
+	toggleDelete: () => void;
+	toggleComplete: () => void;
+	isCompleted: boolean;
+};
+
+export type FinishTaskType = {
+	taskID: string;
+	dashboard: boolean;
+	toggleComplete: () => void;
+	status: boolean | null;
+};
+
+export type AddTaskContextType = {
+	handleCalendarUpdate: (value: number) => void;
+};
+
+export interface DashboardTasksType {
+	taskID: string;
+	title: string;
+	dueDate: number;
+	status: boolean | null;
+	priority: string | null;
+}
+
+export interface MainDashboardType {
+	toggleCompleteDashboard: () => void;
+	dashboardTasks: DashboardTasksType[] | null;
 }

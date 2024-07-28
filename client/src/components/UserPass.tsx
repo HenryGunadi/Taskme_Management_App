@@ -1,8 +1,8 @@
 import images from '../assets/image';
 import React, {useContext, useEffect, useState} from 'react';
-import {AlertContext, UserSettingsCtx, ValidateMsgInterface} from './Types';
+import {DashboardContextType, UserSettingsCtx, ValidateMsgInterface} from './Types';
 import {UpdateUserSettingCtx} from './UserProfile';
-import {alertContext} from './Dashboard';
+import {DashboardContext} from './Dashboard';
 
 function generateRandomPass(int: number): string {
 	let result: string = '';
@@ -15,7 +15,7 @@ function generateRandomPass(int: number): string {
 
 const UserPass: React.FC = () => {
 	const [oldPass, setOldPass] = useState<string>('');
-	const {toggleAlert} = useContext(alertContext) as AlertContext;
+	const {toggleAlert} = useContext(DashboardContext) as DashboardContextType;
 	const [loading, setLoading] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -145,7 +145,7 @@ const UserPass: React.FC = () => {
 
 	return (
 		<>
-			<div className="w-5/12 text-sm font-semibold tracking-wide">
+			<div className="w-full text-sm font-semibold tracking-wide">
 				<label htmlFor="oldPass" className="flex items-center">
 					Old Password <img src={images.lock} className="w-5 h-auto object-cover object-center mx-1" />
 				</label>

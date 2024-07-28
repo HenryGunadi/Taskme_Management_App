@@ -13,7 +13,7 @@ const Login: React.FC = () => {
 		navigate(`/register`);
 	};
 	const navigateToHome = () => {
-		navigate(`/dashboard`);
+		navigate(`/main/dashboard`);
 	};
 
 	const [isLoginFailed, setIsLoginFailed] = useState<boolean | null>(null);
@@ -35,13 +35,16 @@ const Login: React.FC = () => {
 
 		try {
 			const response = await axios.post(`${backendUrl}/login`, loginPayload);
-			const token = response.data.token;
-			if (token) {
-				localStorage.setItem('token', token);
-				console.log('Login successful: ', response.data);
-				navigateToHome();
-			} else {
-				console.error('Login failed: Token not received');
+			if (response.status === 202) {
+				const token = response.data.token;
+				if (token) {
+					localStorage.setItem('token', token);
+					console.log('Login successful: ', response.data);
+					console.log('token from login : ', localStorage.getItem('token'));
+					navigateToHome();
+				} else {
+					console.error('Login failed: Token not received');
+				}
 			}
 		} catch (err) {
 			console.error('Login failed : ', err);

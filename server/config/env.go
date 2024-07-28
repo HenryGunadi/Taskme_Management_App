@@ -13,6 +13,9 @@ type Config struct {
 	FSServiceAccKey    	string
 	JWTSecret 			string
 	JWTExpirationInSeconds 	int64
+	Email string
+	EmailPass string
+	EmailRecipient string
 }
 
 var Envs = initConfig()
@@ -28,6 +31,9 @@ func initConfig() Config {
 		FSServiceAccKey: getEnv("FIRESTORE_SERVICE_ACCOUNT_KEY_FILEPATH", "../taskme-credentials.json"),
 		JWTSecret: getEnv("JWT_SECRET", "secret-secret-hello"),
 		JWTExpirationInSeconds: getEnvAsInt("JWT_EXPIRATION", 3600 * 24 * 7),
+		Email: getEnv("EMAIL", "henrywilliamgunadi25@gmail.com"),
+		EmailPass: getEnv("EMAIL_PASS", "09desember2004Hen."),
+		EmailRecipient: getEnv("EMAIL_RECIPIENT", "henrywilliamgunadi09@gmail.com"),
 	}
 }
 

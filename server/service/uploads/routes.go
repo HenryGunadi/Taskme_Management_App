@@ -104,7 +104,6 @@ func (h *Handler) handleFetchUploads(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("image url : ", imgUrl)
 	utils.WriteJSON(w, http.StatusOK, map[string]string{
 		"imgUrl": imgUrl,
 	})

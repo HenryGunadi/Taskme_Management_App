@@ -1,18 +1,18 @@
 import React, {useContext, useState} from 'react';
 import axios from 'axios';
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage';
-import {AlertContext, filePayload} from './Types';
+import {DashboardContextType, filePayload} from './Types';
 import {backendUrl} from './Login';
 import {FileInterface, FileUploadContext} from './UserProfile';
 import {firebaseApp} from './Firebase';
-import {alertContext} from './Dashboard';
+import {DashboardContext} from './Dashboard';
 
 const FileUpload: React.FC = () => {
 	// context
 	const {togglePreview} = useContext(FileUploadContext) as FileInterface;
-	const {toggleAlert} = useContext(alertContext) as AlertContext;
+	const {toggleAlert} = useContext(DashboardContext) as DashboardContextType;
 
-	const token: string | null = localStorage.getItem('token'); // token
+	const token: string | null = localStorage.getItem('token');
 
 	const [file, setFile] = useState<File | null>(null);
 

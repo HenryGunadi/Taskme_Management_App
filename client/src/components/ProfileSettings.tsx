@@ -1,12 +1,12 @@
-import {imgUrlContext, ImgUrlInterface} from './Dashboard';
+import {DashboardContext} from './Dashboard';
 import FileUpload from './FileUpload';
-import {UserSettingsCtx} from './Types';
+import {DashboardContextType, UserSettingsCtx} from './Types';
 import {useContext} from 'react';
 import {FileInterface, FileUploadContext, UpdateUserSettingCtx} from './UserProfile';
 
 const ProfileSettings: React.FC = () => {
 	// use context
-	const {imgFileUrl} = useContext(imgUrlContext) as ImgUrlInterface;
+	const {imgFileUrl} = useContext(DashboardContext) as DashboardContextType;
 	const {imgFilePreview} = useContext(FileUploadContext) as FileInterface;
 	const {dataSettings, handleInputSettings, handlePostSettings, isChanged} = useContext(UpdateUserSettingCtx) as UserSettingsCtx;
 
@@ -17,7 +17,7 @@ const ProfileSettings: React.FC = () => {
 
 	return (
 		<>
-			<div className="w-fit mr-4">
+			<div className="w-fit pr-4">
 				<img
 					src={!imgFilePreview ? imgFileUrl : imgFilePreview}
 					alt=""
@@ -27,7 +27,7 @@ const ProfileSettings: React.FC = () => {
 			</div>
 
 			<div className="w-4/5 mr-4">
-				<div className="flex items-center h-36">
+				<div className="flex items-center py-16">
 					<FileUpload />
 				</div>
 

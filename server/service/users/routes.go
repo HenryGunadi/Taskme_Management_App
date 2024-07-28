@@ -31,6 +31,7 @@ func (h *Handler) RegisteredRoutes(router *mux.Router) {
 
 func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 	var payload types.RegisterUserPayload
+	ctx := context.Background()
 
 	if err := utils.ParseJSON(r, &payload); err != nil {
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid JSON payload %v", err))
@@ -43,13 +44,10 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	value, err := h.store.CheckUserExists(payload.Email)
-	if err != nil {
-		utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("register error : %v", err))
+	_, _, err := h.store.GetUserByEmail(ctx, payload.Email)
+	if err == nil {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("email already exists"))
 		return
-	} else if value {
-		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("user already exists"))
-		return 
 	}
 
 	hashedPass, err := auth.HashedPassword(payload.Password)
@@ -109,7 +107,6 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("token : ", token)
 
 	utils.WriteJSON(w, http.StatusAccepted, map[string]string{
 		"token": token,

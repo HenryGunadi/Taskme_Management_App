@@ -2,6 +2,8 @@ package types
 
 import (
 	"context"
+
+	"cloud.google.com/go/firestore"
 )
 
 type UserStore interface {
@@ -13,9 +15,24 @@ type UserStore interface {
 	GetUserByID(ctx context.Context, userID string) (*User, error)
 }
 
+type TaskStore interface {
+	AddTask(ctx context.Context, task Task) error
+	GetAllTask(ctx context.Context, userID string) ([]*SendTask, error)
+	DeleteTask(ctx context.Context, taskID string) error
+	UpdateTaskStatus(ctx context.Context, taskID string) error
+	EditTask(ctx context.Context, taskID string, updatedTask *Task) error
+	GetDasboardTasks(ctx context.Context, userID string) ([]*DashboardTasks, error)
+	DeleteCompletedTasks(ctx context.Context) error 
+}
+
 type UploadStore interface {
 	DeletePrevUpload(ctx context.Context, currentTime int64, userID string) error
 	GetUserProfilePict(userID string, ctx context.Context) (string, error)
+}
+
+type EmailStore interface {
+	DueDateTasks(ctx context.Context, userID string) ([]*firestore.DocumentSnapshot, error)
+	GetUserEmailsToSendEmail(ctx context.Context) ([]string, error)
 }
 
 type User struct {
@@ -48,6 +65,41 @@ type Upload struct {
 type UploadPayload struct {
 	UploadName 	string `json:"uploadName" validate:"required"`
 	Url 		string `json:"url" validate:"required"`
+}
+
+type TaskPayload struct {
+	Title string `json:"title" validate:"required"`
+	Description string `json:"description" validate:"required"`
+	Priority *string `json:"priority"`
+	DueDate int64 `json:"dueDate" validate:"required"`
+	Status *bool `json:"status"`
+}
+
+type Task struct {
+	UserID string `json:"userID"`
+	Title string `json:"title"`
+	Description string `json:"description"`
+	Priority *string `json:"priority"`
+	DueDate int64 `json:"dueDate"`
+	Status *bool `json:"status"`
+}
+
+type SendTask struct {
+	TaskID string `json:"taskID"`
+	UserID string `json:"userID"`
+	Title string `json:"title"`
+	Description string `json:"description"`
+	Priority *string `json:"priority"`
+	DueDate int64 `json:"dueDate"`
+	Status *bool `json:"status"`
+}
+
+type DashboardTasks struct {
+	TaskID string `json:"taskID"`	
+	Title string `json:"title"`
+	Status *bool `json:"status"`
+	DueDate int64 `json:"dueDate"`
+	Priority *string `json:"priority"`
 }
 
 type ValidateUser func (token string) (int, error)

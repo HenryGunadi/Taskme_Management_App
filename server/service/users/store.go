@@ -20,12 +20,11 @@ func NewStore(fireStoreClient *firestore.Client) *Store {
 func (s *Store) AddUser(user types.User) error {
 	ctx := context.Background()
 	// add user
-	doc, _, err := s.fireStoreClient.Collection("users").Add(ctx, user)
+	_, _, err := s.fireStoreClient.Collection("users").Add(ctx, user)
 	if err != nil {
 		return fmt.Errorf("add user error : %v", err)
 	}
 
-	fmt.Println("user created : ", doc.ID)
 	return nil
 }
 
@@ -70,12 +69,11 @@ func (s *Store) CheckUserExists(email string) (bool, error) {
 }
 
 func (s *Store) UploadImage(ctx context.Context, upload types.Upload) error {
-	doc, _, err := s.fireStoreClient.Collection("uploads").Add(ctx, upload)
+	_, _, err := s.fireStoreClient.Collection("uploads").Add(ctx, upload)
 	if err != nil {
 		return fmt.Errorf("error uploading file upload to database : %v", err)
 	}
 
-	fmt.Println("file uploaded : ", doc.ID)
 	return  nil
 }
 
@@ -121,6 +119,7 @@ func (s *Store) GetUserByID(ctx context.Context, userID string) (*types.User, er
 
 	return user, nil
 }
+
 
 
 

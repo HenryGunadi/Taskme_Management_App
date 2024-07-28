@@ -1,6 +1,6 @@
 import axios from 'axios';
-import {RegisterUserPayload} from './Types';
-import {useState} from 'react';
+import {RegisterUserPayload, ValidateMsgInterface} from './Types';
+import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 // path prefix to backend
@@ -24,6 +24,10 @@ const Register: React.FC = () => {
 	// handle submitform function
 	const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+		if (hasError) {
+			window.alert('password is incorrect');
+			return;
+		}
 
 		try {
 			const response = await axios.post(`${backendBaseUrl}/register`, formData);
@@ -33,7 +37,7 @@ const Register: React.FC = () => {
 			console.log('Registration successful: ', response.data);
 		} catch (err) {
 			console.error(`Registration failed: `, err);
-			window.alert('User already exists or invalid email');
+			window.alert('user already exists');
 		}
 	};
 
@@ -44,6 +48,75 @@ const Register: React.FC = () => {
 			[name]: value,
 		}));
 	};
+
+	const [isPassword, setIsPassword] = useState<boolean>(false);
+	const [validateMsgRegis, setValidateMsgRegis] = useState<ValidateMsgInterface[]>([
+		{
+			error: true,
+			errorMsg: 'Password must be at least 8 characters long.',
+		},
+		{
+			error: true,
+			errorMsg: 'Password must include at least one uppercase letter.',
+		},
+		{
+			error: true,
+			errorMsg: 'Password must include at least one lowercase letter.',
+		},
+		{
+			error: true,
+			errorMsg: 'Password must include at least one number.',
+		},
+		{
+			error: true,
+			errorMsg: 'Password must include at least one special character.',
+		},
+	]);
+
+	const handleValidateMsgRegister = (password: string) => {
+		const newValidateMsg = [...validateMsgRegis];
+
+		const minLength = 8;
+		const hasUpperCase = /[A-Z]/.test(password);
+		const hasLowerCase = /[a-z]/.test(password);
+		const hasNumber = /\d/.test(password);
+		const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+		newValidateMsg[0].error = password.length < minLength;
+		newValidateMsg[1].error = !hasUpperCase;
+		newValidateMsg[2].error = !hasLowerCase;
+		newValidateMsg[3].error = !hasNumber;
+		newValidateMsg[4].error = !hasSpecialChar;
+
+		setValidateMsgRegis(newValidateMsg);
+	};
+
+	const handlePassRegisterInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const {name, value} = e.target;
+		setFormData((prevState) => ({
+			...prevState,
+			[name]: value,
+		}));
+		const password: string = value;
+
+		handleValidateMsgRegister(password);
+	};
+
+	const handleIsPassword = () => {
+		setIsPassword((prev) => !prev);
+	};
+
+	useEffect(() => {
+		if (isPassword === false) {
+			setFormData((prev) => ({
+				...prev,
+				password: '',
+			}));
+		}
+	}, [isPassword]);
+
+	// check if there is any error on the password
+	const hasError: boolean = validateMsgRegis.some((msg) => msg.error);
 
 	return (
 		<div className="w-screen h-screen flex justify-center items-center">
@@ -58,6 +131,8 @@ const Register: React.FC = () => {
 						name="firstName"
 						value={formData.firstName}
 						onChange={handleInputChange}
+						onClick={() => setIsPassword(false)}
+						required
 					/>
 					<input
 						type="text"
@@ -66,6 +141,8 @@ const Register: React.FC = () => {
 						name="lastName"
 						value={formData.lastName}
 						onChange={handleInputChange}
+						onClick={() => setIsPassword(false)}
+						required
 					/>
 					<input
 						type="email"
@@ -74,15 +151,29 @@ const Register: React.FC = () => {
 						name="email"
 						value={formData.email}
 						onChange={handleInputChange}
+						onClick={() => setIsPassword(false)}
+						required
 					/>
 					<input
-						type="text"
+						type="password"
 						className="mt-2 border border-black p-2"
 						placeholder="Password"
 						name="password"
 						value={formData.password}
-						onChange={handleInputChange}
+						onChange={handlePassRegisterInput}
+						onClick={handleIsPassword}
+						readOnly={isPassword ? false : true}
+						required
 					/>
+					{isPassword && (
+						<ul>
+							{validateMsgRegis.map((item: any, index: number) => (
+								<li key={index} className={`${item.error ? 'text-red-500' : 'text-slate-500'}`}>
+									{item.errorMsg}
+								</li>
+							))}
+						</ul>
+					)}
 
 					<button type="submit" className="m-2">
 						Submit
