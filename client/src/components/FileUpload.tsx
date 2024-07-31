@@ -34,18 +34,13 @@ const FileUpload: React.FC = () => {
 		// upload file to firebase storage
 		try {
 			await uploadBytes(storageRef, file);
-			console.log('file uploaded');
 
 			const url = await getDownloadURL(storageRef);
-			console.log('file downloaded');
-			console.log('url : ', url);
 
 			const metadata: filePayload = {
 				uploadName: file.name,
 				url: url,
 			};
-
-			console.log('metadata : ', metadata);
 
 			const response = await axios.post(`${backendUrl}/uploads`, metadata, {
 				headers: {
@@ -53,7 +48,6 @@ const FileUpload: React.FC = () => {
 					'Content-Type': 'application/json',
 				},
 			});
-			console.log(response.data);
 			setFile(null);
 		} catch (err) {
 			console.error('error uploading file : ', err);

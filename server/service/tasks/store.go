@@ -141,3 +141,69 @@ func (s *Store) GetDasboardTasks(ctx context.Context, userID string) ([]*types.D
 
 	return tasks, nil
 }
+
+func (s *Store) AddDailyTask(userID string, ctx context.Context, dailyTask *types.DailyTasks) error {
+	_, _, err := s.firestore.Collection("dailyTasks").Add(ctx, dailyTask)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *Store) GetDailyTasks(ctx context.Context, userID string) ([]*types.SendDailyTask ,error) {
+	var dailyTasks []*types.SendDailyTask
+
+	iter := s.firestore.Collection("dailyTasks").Where("UserID", "==", userID).Documents(ctx)
+	defer iter.Stop()
+
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+
+		if err != nil {
+			return nil, err
+		}
+
+		dailyTask := new(types.SendDailyTask)
+		if err := doc.DataTo(dailyTask); err != nil {
+			return nil, err
+		}
+
+		dailyTask.TaskID = doc.Ref.ID
+		dailyTasks = append(dailyTasks, dailyTask)
+	}
+
+	if len(dailyTasks) == 0 {
+		return nil, nil
+	}
+
+	return dailyTasks, nil
+}
+
+func (s *Store) CompleteDailyTask(ctx context.Context, taskID string) error {
+	doc := s.firestore.Collection("dailyTasks").Doc(taskID)
+
+	_, err := doc.Update(ctx, []firestore.Update{{
+		Path: "Status",
+		Value: true,
+	}})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *Store) DeleteDailyTask(ctx context.Context, taskID string) error {
+	doc := s.firestore.Collection("dailyTasks").Doc(taskID)
+	
+	_, err := doc.Delete(ctx)
+	if err != nil {
+		return err
+	}
+	
+	return nil
+}

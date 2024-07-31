@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
 	return (
 		<>
 			{/* navbar */}
-			<div className="flex items-center justify-between h-14 px-6 w-full border  border-b-slate-300  bg-white">
+			<div className="flex items-center justify-between h-16 px-6 w-full border  border-b-slate-300  bg-white">
 				<div
 					className="w-80 min-w-64 border border-slate-500 bg-slate-100 px-4 py-1 rounded-md hover:cursor-pointer"
 					onClick={toggleCommand}

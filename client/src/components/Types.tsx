@@ -69,6 +69,8 @@ export interface DashboardContextType {
 	toggleCheckEdited: (state: boolean) => void;
 	edited: boolean;
 	toggleEditUi: () => void;
+	handleAnyTaskChanges: (state: boolean) => void;
+	anyTaskChanges: boolean;
 } //
 
 export interface UserRoutes {
@@ -127,6 +129,7 @@ export type FinishTaskType = {
 
 export type AddTaskContextType = {
 	handleCalendarUpdate: (value: number) => void;
+	handlePriority: (value: string) => void;
 };
 
 export interface DashboardTasksType {
@@ -140,4 +143,42 @@ export interface DashboardTasksType {
 export interface MainDashboardType {
 	toggleCompleteDashboard: () => void;
 	dashboardTasks: DashboardTasksType[] | null;
+	handleSetDailyTask: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	handleDailyTaskCategory: (value: string) => void;
+	dailyTasks: DailyTasksType;
+	handleDailyTaskTime: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	handleIsAddedOrDeletedOrCompleted: (action: DailyTaskProps) => void;
+	dailyTaskFetch: DailyTasksFetchType[];
 }
+
+type Time = {
+	hour: number;
+	minute: number;
+};
+
+export interface DailyTasksType {
+	task: string;
+	status: boolean;
+	time: Time | null;
+	category: string | null;
+}
+
+export interface DailyTasksFetchType {
+	taskID: string;
+	userID: string;
+	task: string;
+	status: boolean;
+	time: Time;
+	category: string | null;
+}
+
+export interface FinishDailyTaskType {
+	taskID: string;
+	task: DailyTasksFetchType;
+}
+
+export type DailyTaskProps = {
+	added: boolean;
+	deleted: boolean;
+	completed: boolean;
+};

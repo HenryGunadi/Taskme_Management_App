@@ -11,6 +11,7 @@ import MainDashboard from './MainDashboard';
 import Task from './Task';
 import AddTask from './ui/AddTask';
 import Notification from './Notification';
+import AddTaskButton from './ui/AddTaskButton';
 
 export const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
@@ -54,7 +55,7 @@ const Dashboard: React.FC = () => {
 		};
 
 		fetchUserProfilePict();
-	}, [token]);
+	}, []);
 
 	useEffect(() => {
 		const fetchUserData = async () => {
@@ -79,11 +80,11 @@ const Dashboard: React.FC = () => {
 			}
 		};
 		fetchUserData();
-	}, [token]);
+	}, []);
 
 	useEffect(() => {
 		console.log('token from dashboard : ', token);
-	}, [token]);
+	}, []);
 
 	// command ui
 	const [isCommand, setIsCommand] = useState<boolean>(false);
@@ -222,7 +223,7 @@ const Dashboard: React.FC = () => {
 				addTaskToServer();
 			}
 		}
-	}, [submitTask, token]);
+	}, [submitTask]);
 
 	const handleInputs = (e: ChangeEvent<HTMLInputElement>) => {
 		const {name, value} = e.target;
@@ -298,9 +299,21 @@ const Dashboard: React.FC = () => {
 		setEdited(state);
 	};
 
+	const [anyTaskChanges, setAnyTaskChanges] = useState<boolean>(false);
+
+	const handleAnyTaskChanges = (state: boolean) => {
+		if (state) {
+			setAnyTaskChanges(true);
+		} else {
+			setAnyTaskChanges(false);
+		}
+	};
+
 	return (
 		<DashboardContext.Provider
 			value={{
+				anyTaskChanges,
+				handleAnyTaskChanges,
 				toggleEditUi,
 				edited,
 				toggleCheckEdited,
@@ -324,7 +337,7 @@ const Dashboard: React.FC = () => {
 				toggleEdited,
 			}}
 		>
-			<div className="relative text-slate-950 bg-white flex w-full h-full box-border">
+			<div className="relative text-slate-950 bg-white flex w-screen h-screen box-border">
 				<Sidebar />
 				<div className="w-10/12 flex flex-col bg-slate-100">
 					<Navbar />
@@ -370,6 +383,8 @@ const Dashboard: React.FC = () => {
 				{isAddTask && <AddTask data={null} />}
 
 				{isEdited && <AddTask data={taskDesc && taskDesc} />}
+
+				<AddTaskButton />
 			</div>
 		</DashboardContext.Provider>
 	);

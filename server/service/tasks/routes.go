@@ -28,6 +28,10 @@ func (h *Handler) RegisteredRoutes(r *mux.Router) {
 	r.HandleFunc("/task/{id}", h.handleCompleteTask).Methods("PATCH")
 	r.HandleFunc("/task/update/{id}", h.handleEditTask).Methods("PATCH")
 	r.HandleFunc("/dashboardTasks", h.handleGetDashboardTask).Methods("GET")
+	r.HandleFunc("/task/daily", h.handleAddDailyTask).Methods("POST")
+	r.HandleFunc("/task/daily", h.handleGetDailyTasks).Methods("GET")
+	r.HandleFunc("/task/daily/{id}", h.handleCompleteDailyTask).Methods("PATCH")
+	r.HandleFunc("/task/daily/{id}", h.handleDeleteDailyTask).Methods("DELETE")
 }
 
 func (h *Handler) handleAddTask(w http.ResponseWriter, r *http.Request) {
@@ -243,4 +247,153 @@ func (h *Handler) handleGetDashboardTask(w http.ResponseWriter, r *http.Request)
 	}
 
 	utils.WriteJSON(w, http.StatusOK, tasks)
+}
+
+func (h *Handler) handleAddDailyTask(w http.ResponseWriter, r *http.Request) {
+	var payload types.DailyTasksPayload
+	ctx := context.Background()
+
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user is not authorized"))
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	userID, err := auth.ValidateUser(token)
+	if err != nil {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user is not authorized : %v", err))
+		return
+	}
+
+	if err := utils.ParseJSON(r, &payload); err != nil {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid JSON payload : %v", err))
+		return
+	}
+
+	if err := utils.Validate.Struct(payload); err != nil {
+		errors := err.(validator.ValidationErrors)
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload validation : %v", errors))
+		return
+	}
+
+	dailyTask := &types.DailyTasks{
+		UserID: userID,
+		Task: payload.Task,
+		Status: payload.Status,
+		Time: &types.Time{
+			Hour: payload.Time.Hour,
+			Minute: payload.Time.Minute,
+		},
+		Category: payload.Category,
+	}
+
+	if err := h.store.AddDailyTask(userID, ctx, dailyTask); err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("error adding daily task : %v", err))
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, map[string]bool{
+		"status": true,
+	})
+}
+
+func (h *Handler) handleGetDailyTasks(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user is not authorized"))
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	userID, err := auth.ValidateUser(token)
+	if err != nil {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user is not authorized : %v", err))
+		return
+	}
+
+	dailyTasks, err := h.store.GetDailyTasks(ctx, userID)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("error getting daily tasks : %v", err))
+		return
+	} else if dailyTasks == nil {
+		utils.WriteJSON(w, http.StatusOK, map[string]bool{
+			"daily tasks": false,
+		})
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, dailyTasks)
+}
+
+func (h *Handler) handleCompleteDailyTask(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+
+	vars := mux.Vars(r)
+	taskID, ok := vars["id"]
+	if !ok {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("missing required request parameter"))
+		return
+	}
+
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user is not authorized"))
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	_, err := auth.ValidateUser(token)
+	if err != nil {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user is not authorized : %v", err))
+		return
+	}
+
+	if err := h.store.CompleteDailyTask(ctx, taskID); err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("error completing daily task : %v", err))
+		return
+	}
+	
+	utils.WriteJSON(w, http.StatusOK, map[string]bool{
+		"completed": true,
+	})
+}
+
+func (h *Handler) handleDeleteDailyTask(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user is not authorized"))
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	_, err := auth.ValidateUser(token)
+	if err != nil {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user is not authorized : %v", err))
+		return
+	}
+
+	vars := mux.Vars(r)
+	taskID, ok := vars["id"]
+	if !ok {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("missing required request argument : %v", err))
+		return
+	}
+
+	if err := h.store.DeleteDailyTask(ctx, taskID); err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("error deleting daily task : %v", err))
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, map[string]bool {
+		"deleted": true,
+	})
 }

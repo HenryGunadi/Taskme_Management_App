@@ -50,12 +50,12 @@ const FinishTask: React.FC<FinishTaskType> = ({taskID, dashboard, toggleComplete
 	return (
 		<AlertDialog>
 			{dashboard && status ? (
-				<i className="fa-solid fa-circle-check hover:cursor-pointer text-green-500 "></i>
+				<i className="fa-solid fa-square-check text-green-500 "></i>
 			) : (
 				<AlertDialogTrigger asChild>
 					{dashboard ? (
 						<i
-							className={`fa-solid fa-circle-check hover:cursor-pointer transition hover:opacity-50 duration-200 ${
+							className={`fa-solid fa-square-check hover:cursor-pointer transition hover:opacity-50 duration-200 ${
 								status ? 'text-green-500' : 'text-slate-500'
 							}`}
 						></i>

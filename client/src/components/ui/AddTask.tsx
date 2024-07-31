@@ -46,6 +46,19 @@ const AddTask: React.FC<{data: TaskDataFetch | null}> = ({data}) => {
 		});
 	};
 
+	const handlePriority = (value: string) => {
+		setDatas((prev) => {
+			if (!prev) {
+				return null;
+			}
+
+			return {
+				...prev,
+				priority: value,
+			};
+		});
+	};
+
 	const updateTask = async () => {
 		if (token) {
 			try {
@@ -73,7 +86,7 @@ const AddTask: React.FC<{data: TaskDataFetch | null}> = ({data}) => {
 	};
 
 	return (
-		<AddTaskContext.Provider value={{handleCalendarUpdate}}>
+		<AddTaskContext.Provider value={{handleCalendarUpdate, handlePriority}}>
 			<div className="fixed flex z-50 bg-black bg-opacity-50 justify-center items-center inset-0">
 				<div className="bg-white rounded-lg border-slate-800 border p-6 overflow-y-auto flex flex-col w-1/3 h-3/4">
 					<div className="w-full flex justify-end">

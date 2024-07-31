@@ -23,6 +23,10 @@ type TaskStore interface {
 	EditTask(ctx context.Context, taskID string, updatedTask *Task) error
 	GetDasboardTasks(ctx context.Context, userID string) ([]*DashboardTasks, error)
 	DeleteCompletedTasks(ctx context.Context) error 
+	AddDailyTask(userID string, ctx context.Context, dailyTask *DailyTasks) error
+	GetDailyTasks(ctx context.Context, userID string) ([]*SendDailyTask, error)
+	CompleteDailyTask(ctx context.Context, taskID string) error
+	DeleteDailyTask(ctx context.Context, taskID string) error 
 }
 
 type UploadStore interface {
@@ -100,6 +104,35 @@ type DashboardTasks struct {
 	Status *bool `json:"status"`
 	DueDate int64 `json:"dueDate"`
 	Priority *string `json:"priority"`
+}
+
+type Time struct {
+	Hour int64 `json:"hour"`
+	Minute int64 `json:"minute"`
+}
+
+type DailyTasksPayload struct {
+	Task string `json:"task" validate:"required"`
+	Status bool `json:"status"`
+	Time  *Time `json:"time" validate:"required"`
+	Category *string `json:"category" validate:"required"`
+}
+
+type DailyTasks struct {
+	UserID string `json:"userID"`
+	Task string `json:"task"`
+	Status bool `json:"status"`
+	Time  *Time `json:"time"`
+	Category *string `json:"category"`
+}
+
+type SendDailyTask struct {
+	TaskID string `json:"taskID"`
+	UserID string `json:"userID"`
+	Task string `json:"task"`
+	Status bool `json:"status"`
+	Time  *Time `json:"time"`
+	Category *string `json:"category"`
 }
 
 type ValidateUser func (token string) (int, error)

@@ -4,12 +4,38 @@ import {DayPicker} from 'react-day-picker';
 
 import {cn} from '../../lib/utils';
 import {buttonVariants} from '../../components/ui/button';
+import {CalendarContextType, CalendarUiContext} from './CalendarUi';
+import {useNavigate} from 'react-router-dom';
+import {set} from 'date-fns';
+import {DashboardContext} from '../Dashboard';
+import {DashboardContextType} from '../Types';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-function Calendar({className, classNames, showOutsideDays = true, ...props}: CalendarProps) {
+function Calendars({className, classNames, showOutsideDays = true, ...props}: CalendarProps) {
+	const {notFinishedTasks, handleIsClicked} = React.useContext(CalendarUiContext) as CalendarContextType;
+	const navigate = useNavigate();
+	const navigateToTask = (date: Date) => {
+		if (!disabledDays(date)) {
+			navigate('/main/task');
+		}
+	};
+
+	// convert dates into string
+	const dueDatesSet = new Set(notFinishedTasks?.map((date: Date) => date.toDateString()));
+
+	const disabledDays = (date: Date) => {
+		return !dueDatesSet.has(date.toDateString());
+	};
+
+	const handleDayClick = (date: Date) => {
+		navigateToTask(date);
+		handleIsClicked(date);
+	};
+
 	return (
 		<DayPicker
+			onDayClick={handleDayClick}
 			showOutsideDays={showOutsideDays}
 			className={cn('p-3 text-black text-xs', className)}
 			classNames={{
@@ -29,7 +55,7 @@ function Calendar({className, classNames, showOutsideDays = true, ...props}: Cal
 				day: cn(buttonVariants({variant: 'ghost'}), 'h-9 w-9 p-0 font-normal aria-selected:opacity-100'),
 				day_range_end: 'day-range-end',
 				day_selected:
-					'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
+					'bg-red-500 text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
 				day_today: 'bg-accent text-accent-foreground',
 				day_outside:
 					'day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
@@ -43,9 +69,10 @@ function Calendar({className, classNames, showOutsideDays = true, ...props}: Cal
 				IconRight: ({...props}) => <ChevronRight className="h-4 w-4" />,
 			}}
 			{...props}
+			disabled={disabledDays}
 		/>
 	);
 }
-Calendar.displayName = 'Calendar';
+Calendars.displayName = 'Calendar';
 
-export {Calendar};
+export {Calendars};

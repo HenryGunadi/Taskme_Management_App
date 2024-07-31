@@ -8,7 +8,8 @@ import {Button} from './button';
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from './command';
 import {Popover, PopoverContent, PopoverTrigger} from './popover';
 import {DashboardContext} from '../Dashboard';
-import {DashboardContextType} from '../Types';
+import {AddTaskContextType, DashboardContextType} from '../Types';
+import {AddTaskContext} from './AddTask';
 
 type Status = {
 	name: string;
@@ -46,6 +47,7 @@ const ComboboxPopover: React.FC<PopoverProps> = ({priorities}) => {
 	const [open, setOpen] = React.useState(false);
 	const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(null);
 	const {handlePopOver} = React.useContext(DashboardContext) as DashboardContextType;
+	const {handlePriority} = React.useContext(AddTaskContext) as AddTaskContextType;
 
 	React.useEffect(() => {
 		setSelectedStatus(statuses.find((priority) => priority.value === priorities) || null);
@@ -92,6 +94,7 @@ const ComboboxPopover: React.FC<PopoverProps> = ({priorities}) => {
 										onSelect={(value) => {
 											setSelectedStatus(statuses.find((priority) => priority.value === value) || null);
 											setOpen(false);
+											handlePriority(value);
 										}}
 									>
 										<status.icon className={cn('mr-2 h-4 w-4', status.value === selectedStatus?.value ? 'opacity-100' : 'opacity-40')} />

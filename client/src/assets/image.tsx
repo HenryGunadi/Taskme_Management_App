@@ -14,6 +14,10 @@ import calendar from './calendar.svg';
 import trash from './trash-2.svg';
 import more from './more-horizontal.svg';
 import moreGray from './more-horizontal (1).svg';
+import target from './target.png';
+import plus from './plus (1).svg';
+import chevUp from './chevron-up.svg';
+import chevDown from './chevron-down.svg';
 
 const images = {
 	user,
@@ -32,6 +36,10 @@ const images = {
 	trash,
 	more,
 	moreGray,
+	target,
+	plus,
+	chevUp,
+	chevDown,
 };
 
 export default images;

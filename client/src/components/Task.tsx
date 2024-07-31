@@ -10,9 +10,8 @@ import {createContext} from 'react';
 export const TaskContext = createContext<TaskType | undefined>(undefined);
 
 const Task: React.FC = () => {
-	const {toggleAddTask, toggleAlert, submitTask, handleSetTaskDetails, taskDetails, edited, toggleCheckEdited} = useContext(
-		DashboardContext
-	) as DashboardContextType;
+	const {handleAnyTaskChanges, toggleAddTask, toggleAlert, submitTask, handleSetTaskDetails, taskDetails, edited, toggleCheckEdited} =
+		useContext(DashboardContext) as DashboardContextType;
 	const token = localStorage.getItem('token');
 
 	const [isDeleted, setIsDeleted] = useState<boolean>(false);
@@ -20,6 +19,11 @@ const Task: React.FC = () => {
 
 	const today = new Date();
 	const unixTimeSeconds = Math.floor(today.getTime() / 1000);
+
+	useEffect(() => {
+		const trues = isDeleted || isCompleted;
+		handleAnyTaskChanges(trues);
+	}, [isDeleted, isCompleted]);
 
 	const toggleDelete = () => {
 		setIsDeleted(true);
@@ -163,17 +167,6 @@ const Task: React.FC = () => {
 								})
 								.map((task: TaskDataFetch, index: number) => <TaskContainer key={index} data={task} />)}
 					</div>
-				</div>
-
-				<div
-					className="flex items-center absolute right-6 bottom-6 transform transition hover:-translate-y-1 duration-300 hover:cursor-pointer hover:opacity-70"
-					onClick={() => {
-						toggleAddTask(null);
-					}}
-				>
-					<h1 className="px-2 font-medium">Add Task</h1>
-
-					<img src={images.plusIcon} alt="" className="w-10 h-auto min-w-10" />
 				</div>
 			</TaskContext.Provider>
 		</>
