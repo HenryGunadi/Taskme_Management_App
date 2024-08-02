@@ -3,9 +3,11 @@ package email
 import (
 	"context"
 	"fmt"
+	"go/types"
 	"time"
 
 	"cloud.google.com/go/firestore"
+	"github.com/HenryGunadi/Taskme_Management_App/server/types"
 )
 
 type Store struct {
@@ -17,6 +19,7 @@ func NewStore(firestoreClient *firestore.Client) *Store {
 }
 
 func (s *Store) DueDateTasks(ctx context.Context, userID string) ([]*firestore.DocumentSnapshot, error) {
+	var dueDatesTasks []*
 	// in dates
 	now := time.Now()
 	oneDayFromNow := now.Add(24 * time.Hour)
@@ -25,16 +28,31 @@ func (s *Store) DueDateTasks(ctx context.Context, userID string) ([]*firestore.D
 	nowUnix := now.Unix()
 	oneDayFromNowUnix := oneDayFromNow.Unix()
 
-	query := s.firestore.Collection("tasks").Where("UserID", "==", userID).Where("DueDate", ">=", nowUnix).Where("DueDate", "<=", oneDayFromNowUnix)
+	iter := s.firestore.Collection("tasks").Where("UserID", "==", userID).Where("DueDate", ">=", nowUnix).Where("DueDate", "<=", oneDayFromNowUnix).Documents(ctx)
+	defer iter.Stop()
 
-	docs, err := query.Documents(ctx).GetAll()
-	if err != nil {
-		return nil, fmt.Errorf("error querying docs")
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+
+		if err != nil {
+			return nil, err
+		}
+
+
+		if err := doc.DataTo()
 	}
 
-	if len(docs) == 0 {
-		return nil, nil
-	}	
+	// docs, err := query.Documents(ctx).GetAll()
+	// if err != nil {
+	// 	return nil, fmt.Errorf("error querying docs")
+	// }
+
+	// if len(docs) == 0 {
+	// 	return nil, nil
+	// }	
 
 	return docs, nil
 }

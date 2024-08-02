@@ -56,6 +56,8 @@ const ComboboxPopover: React.FC<PopoverProps> = ({priorities}) => {
 	React.useEffect(() => {
 		if (selectedStatus?.value) {
 			handlePopOver(selectedStatus.value);
+		} else {
+			handlePopOver('low');
 		}
 	}, [selectedStatus?.value]);
 

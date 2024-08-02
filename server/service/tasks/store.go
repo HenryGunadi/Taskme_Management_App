@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"cloud.google.com/go/firestore"
-	"github.com/HenryGunadi/productivity-firebase/server/types"
+	"github.com/HenryGunadi/Taskme_Management_App/server/types"
 	"google.golang.org/api/iterator"
 )
 
@@ -205,5 +205,33 @@ func (s *Store) DeleteDailyTask(ctx context.Context, taskID string) error {
 		return err
 	}
 	
+	return nil
+}
+
+func (s *Store) ResetDailyTask(ctx context.Context) error {
+	iter := s.firestore.Collection("dailyTasks").Documents(ctx)
+	defer iter.Stop()
+
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+
+		if err != nil {
+			return err
+		}
+
+		_, err = doc.Ref.Update(ctx, []firestore.Update{
+			{
+				Path: "Status",
+				Value: true,
+			},
+		})
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }

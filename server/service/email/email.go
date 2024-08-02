@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"cloud.google.com/go/firestore"
-	"github.com/HenryGunadi/productivity-firebase/server/config"
+	"github.com/HenryGunadi/Taskme_Management_App/server/config"
 	"gopkg.in/gomail.v2"
 )
 

@@ -23,8 +23,8 @@ const FinishDailyTask: React.FC<FinishDailyTaskType> = ({taskID, task}) => {
 
 	const completeDailyTask = async () => {
 		if (token) {
-			toggleAlert(null, '', true);
 			try {
+				toggleAlert(null, '', true);
 				const response = await axios.patch(
 					`${backendUrl}/task/daily/${taskID}`,
 					{},
@@ -48,6 +48,8 @@ const FinishDailyTask: React.FC<FinishDailyTaskType> = ({taskID, task}) => {
 			} catch (err) {
 				console.error('error completing daily task : ', err);
 				toggleAlert(false, 'Error completing daily task.', false);
+			} finally {
+				toggleAlert(null, '', false);
 			}
 		}
 	};

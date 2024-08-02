@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/HenryGunadi/productivity-firebase/server/config"
-	"github.com/HenryGunadi/productivity-firebase/server/service/auth"
-	"github.com/HenryGunadi/productivity-firebase/server/types"
-	"github.com/HenryGunadi/productivity-firebase/server/utils"
+	"github.com/HenryGunadi/Taskme_Management_App/server/config"
+	"github.com/HenryGunadi/Taskme_Management_App/server/service/auth"
+	"github.com/HenryGunadi/Taskme_Management_App/server/types"
+	"github.com/HenryGunadi/Taskme_Management_App/server/utils"
 	"github.com/go-playground/validator"
 	"github.com/gorilla/mux"
 )

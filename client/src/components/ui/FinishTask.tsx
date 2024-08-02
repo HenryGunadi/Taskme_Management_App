@@ -43,6 +43,8 @@ const FinishTask: React.FC<FinishTaskType> = ({taskID, dashboard, toggleComplete
 			} catch (err) {
 				console.error('error updating task status : ', err);
 				toggleAlert(false, 'Error completing task.', false);
+			} finally {
+				toggleAlert(null, '', false);
 			}
 		}
 	};
@@ -50,12 +52,12 @@ const FinishTask: React.FC<FinishTaskType> = ({taskID, dashboard, toggleComplete
 	return (
 		<AlertDialog>
 			{dashboard && status ? (
-				<i className="fa-solid fa-square-check text-green-500 "></i>
+				<i className="fa-solid fa-square-check text-green-500 text-lg"></i>
 			) : (
 				<AlertDialogTrigger asChild>
 					{dashboard ? (
 						<i
-							className={`fa-solid fa-square-check hover:cursor-pointer transition hover:opacity-50 duration-200 ${
+							className={`fa-solid fa-square-check hover:cursor-pointer transition hover:opacity-50 duration-200 text-lg ${
 								status ? 'text-green-500' : 'text-slate-500'
 							}`}
 						></i>

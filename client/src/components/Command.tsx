@@ -3,6 +3,7 @@ import images from '../assets/image';
 import {DashboardContextType, Item} from './Types';
 import {useNavigate} from 'react-router-dom';
 import {DashboardContext} from './Dashboard';
+import {ScrollArea} from './ui/scroll-area';
 
 const Command: React.FC = () => {
 	// input value
@@ -85,7 +86,7 @@ const Command: React.FC = () => {
 						onChange={hanldeInputValue}
 					/>
 				</form>
-				<div className="p-4 overflow-auto">
+				<ScrollArea className="p-4">
 					<div className="py-1">
 						<h1 className="text-sm">Links</h1>
 						{filteredItems
@@ -123,7 +124,7 @@ const Command: React.FC = () => {
 								</div>
 							))}
 					</div>
-				</div>
+				</ScrollArea>
 			</div>
 		</div>
 	);

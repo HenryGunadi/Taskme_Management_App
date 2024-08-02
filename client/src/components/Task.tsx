@@ -35,7 +35,6 @@ const Task: React.FC = () => {
 
 	const fetchTaskData = async () => {
 		if (token) {
-			toggleAlert(null, '', true);
 			try {
 				const response = await axios.get<TaskDataFetch[]>(`${backendUrl}/task`, {
 					headers: {
@@ -45,19 +44,18 @@ const Task: React.FC = () => {
 				});
 
 				if (response.status === 200) {
-					console.log('task details : ', response.data);
 					handleSetTaskDetails(response.data);
 				}
 			} catch (err) {
 				console.error('fetching user task details error : ', err);
-			} finally {
-				toggleAlert(null, '', false);
 			}
 		}
 	};
 
 	useEffect(() => {
-		fetchTaskData();
+		if (token) {
+			fetchTaskData();
+		}
 	}, [token, submitTask]);
 
 	const reFetchData = async () => {
@@ -102,7 +100,7 @@ const Task: React.FC = () => {
 
 						{taskDetails &&
 							taskDetails
-								.filter((task) => (task.priority === 'high' || task.priority === null) && task.status !== true)
+								.filter((task) => task.priority === 'high' && task.status !== true)
 								.sort((a, b) => {
 									const dateA = Math.abs(unixTimeSeconds - a.dueDate);
 									const dateB = Math.abs(unixTimeSeconds - b.dueDate);
@@ -130,7 +128,7 @@ const Task: React.FC = () => {
 
 						{taskDetails &&
 							taskDetails
-								.filter((task) => (task.priority === 'medium' || task.priority === null) && task.status !== true)
+								.filter((task) => task.priority === 'medium' && task.status !== true)
 								.sort((a, b) => {
 									const dateA = Math.abs(unixTimeSeconds - a.dueDate);
 									const dateB = Math.abs(unixTimeSeconds - b.dueDate);

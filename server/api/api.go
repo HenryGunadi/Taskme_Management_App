@@ -5,10 +5,10 @@ import (
 	"net/http"
 
 	"cloud.google.com/go/firestore"
-	"github.com/HenryGunadi/productivity-firebase/server/service/email"
-	"github.com/HenryGunadi/productivity-firebase/server/service/tasks"
-	"github.com/HenryGunadi/productivity-firebase/server/service/uploads"
-	"github.com/HenryGunadi/productivity-firebase/server/service/users"
+	"github.com/HenryGunadi/Taskme_Management_App/server/service/email"
+	"github.com/HenryGunadi/Taskme_Management_App/server/service/tasks"
+	"github.com/HenryGunadi/Taskme_Management_App/server/service/uploads"
+	"github.com/HenryGunadi/Taskme_Management_App/server/service/users"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )

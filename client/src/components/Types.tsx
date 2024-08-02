@@ -149,6 +149,9 @@ export interface MainDashboardType {
 	handleDailyTaskTime: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	handleIsAddedOrDeletedOrCompleted: (action: DailyTaskProps) => void;
 	dailyTaskFetch: DailyTasksFetchType[];
+	totalTasks: TotalTasksType;
+	toDosData: ToDosType;
+	dailyTaskData: DailyTaskDataType;
 }
 
 type Time = {
@@ -181,4 +184,22 @@ export type DailyTaskProps = {
 	added: boolean;
 	deleted: boolean;
 	completed: boolean;
+};
+
+export type DailyTaskDataType = {
+	totalDailyTasks: number;
+	unfinishedDailyTask: number;
+	finishedDailyTask: number;
+};
+
+export type ToDosType = {
+	totalTodos: number;
+	unfinishedTodos: number;
+	finishedTodos: number;
+};
+
+export type TotalTasksType = {
+	totalTasks: number;
+	finishedTotalTasks: number;
+	unfinishedTotalTasks: number;
 };

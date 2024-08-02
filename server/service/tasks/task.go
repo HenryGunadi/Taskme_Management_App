@@ -15,4 +15,10 @@ func HandleDeleteTask24Hour(ctx context.Context, time time.Time, client *firesto
 	} else {
 		fmt.Printf("Completed tasks are deleted at %v", time)
 	}
+	
+	if err := taskStore.ResetDailyTask(ctx); err != nil {
+		fmt.Printf("reset daily task error : %v", err)
+	} else {
+		fmt.Printf("daily task are reset at :  %v", time)
+	}
 }

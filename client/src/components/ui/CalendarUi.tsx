@@ -87,7 +87,7 @@ export function CalendarDemo() {
 
 	return (
 		<CalendarUiContext.Provider value={{notFinishedTasks, handleIsClicked}}>
-			<Calendars mode="multiple" selected={notFinishedTasks} className="rounded-md w-full shadow-md border" />
+			<Calendars mode="multiple" selected={notFinishedTasks} className="rounded-md w-fit shadow-md border flex justify-center" />
 			{isClicked && (
 				<div className="fixed inset-0 flex justify-center items-center z-50">
 					<ScrollArea className="w-1/4 h-1/2 overflow-auto bg-white p-4 rounded-lg">

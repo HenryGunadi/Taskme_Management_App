@@ -52,6 +52,13 @@ const AddTask: React.FC<{data: TaskDataFetch | null}> = ({data}) => {
 				return null;
 			}
 
+			if (value === '') {
+				return {
+					...prev,
+					priority: 'low',
+				};
+			}
+
 			return {
 				...prev,
 				priority: value,

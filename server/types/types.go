@@ -27,6 +27,7 @@ type TaskStore interface {
 	GetDailyTasks(ctx context.Context, userID string) ([]*SendDailyTask, error)
 	CompleteDailyTask(ctx context.Context, taskID string) error
 	DeleteDailyTask(ctx context.Context, taskID string) error 
+	ResetDailyTask(ctx context.Context) error
 }
 
 type UploadStore interface {

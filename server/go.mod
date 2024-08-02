@@ -1,4 +1,4 @@
-module github.com/HenryGunadi/productivity-firebase/server
+module github.com/HenryGunadi/Taskme_Management_App/server
 
 go 1.22.3
 

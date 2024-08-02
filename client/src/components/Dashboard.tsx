@@ -55,7 +55,7 @@ const Dashboard: React.FC = () => {
 		};
 
 		fetchUserProfilePict();
-	}, []);
+	}, [token]);
 
 	useEffect(() => {
 		const fetchUserData = async () => {
@@ -80,11 +80,7 @@ const Dashboard: React.FC = () => {
 			}
 		};
 		fetchUserData();
-	}, []);
-
-	useEffect(() => {
-		console.log('token from dashboard : ', token);
-	}, []);
+	}, [token]);
 
 	// command ui
 	const [isCommand, setIsCommand] = useState<boolean>(false);
@@ -114,7 +110,7 @@ const Dashboard: React.FC = () => {
 					...prev,
 					isSuccess: null,
 				}));
-			}, 2000);
+			}, 3000);
 
 			return () => clearTimeout(alertDuration);
 		}
@@ -165,7 +161,7 @@ const Dashboard: React.FC = () => {
 	// add task
 	const [submitTask, setSubmitTask] = useState<boolean>(false);
 	const handleSetSubmitTask = () => {
-		setSubmitTask(true);
+		setSubmitTask((prev) => !prev);
 	};
 
 	const [task, setTask] = useState<TaskDataInterface>({
@@ -193,37 +189,33 @@ const Dashboard: React.FC = () => {
 		setSubmitTask(false);
 	};
 
-	useEffect(() => {
-		if (token) {
-			if (submitTask) {
-				const addTaskToServer = async () => {
-					toggleAlert(null, '', true);
-					try {
-						const response = await axios.post(`${backendUrl}/task`, task, {
-							headers: {
-								Authorization: `Bearer ${token}`,
-								'Content-Type': 'application/json',
-							},
-						});
+	const addTaskToServer = async () => {
+		try {
+			toggleAlert(null, '', true);
+			const response = await axios.post(`${backendUrl}/task`, task, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+			});
 
-						if (response.status === 200) {
-							console.log('add task response : ', response.data);
-							toggleAlert(true, 'Task added successfully.', false);
-						}
-					} catch (err) {
-						console.error('failed to add task : ', err);
-						toggleAlert(false, 'Adding task error.', false);
-					} finally {
-						toggleOffAddTask();
-						resetTask();
-						console.log('task after reset: ', task);
-					}
-				};
-
-				addTaskToServer();
+			if (response.status === 200) {
+				toggleAlert(true, 'Task added successfully.', false);
 			}
+		} catch (err) {
+			toggleAlert(false, 'Adding task error.', false);
+		} finally {
+			toggleOffAddTask();
+			resetTask();
 		}
-	}, [submitTask]);
+	};
+
+	useEffect(() => {
+		if (token && submitTask) {
+			addTaskToServer();
+			handleSetSubmitTask();
+		}
+	}, [submitTask, token]);
 
 	const handleInputs = (e: ChangeEvent<HTMLInputElement>) => {
 		const {name, value} = e.target;
@@ -374,9 +366,11 @@ const Dashboard: React.FC = () => {
 					</div>
 				) : (
 					alert.isSuccess === false && (
-						<Alert severity="error" className="fixed top-2 left-1/2 transform -translate-x-1/2">
-							{alert.alertMsg}
-						</Alert>
+						<div className="fixed flex justify-center w-full mt-2">
+							<Alert severity="error" className="">
+								{alert.alertMsg}
+							</Alert>
+						</div>
 					)
 				)}
 
