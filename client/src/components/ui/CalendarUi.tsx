@@ -57,12 +57,6 @@ export function CalendarDemo() {
 		});
 
 	React.useEffect(() => {
-		if (calendarTasks) {
-			console.log('Extracted dates : ', notFinishedTasks);
-		}
-	}, [calendarTasks]);
-
-	React.useEffect(() => {
 		if (token) {
 			const fetchCalendarTasks = async () => {
 				const response = await axios.get<DashboardTasksType[]>(`${backendUrl}/dashboardTasks`, {
@@ -72,7 +66,6 @@ export function CalendarDemo() {
 				});
 
 				if (response.status === 200 && response.data) {
-					console.log('Calendar Tasks : ', response.data);
 					setCalendarTasks(response.data);
 				}
 			};
@@ -81,13 +74,9 @@ export function CalendarDemo() {
 		}
 	}, [submitTask, token, anyTaskChanges, edited]);
 
-	React.useEffect(() => {
-		console.log('day selected : ', daySelected);
-	}, [isClicked]);
-
 	return (
 		<CalendarUiContext.Provider value={{notFinishedTasks, handleIsClicked}}>
-			<Calendars mode="multiple" selected={notFinishedTasks} className="rounded-md w-fit shadow-md border flex justify-center" />
+			<Calendars mode="multiple" selected={notFinishedTasks} className="rounded-md w-full shadow-md border flex justify-center" />
 			{isClicked && (
 				<div className="fixed inset-0 flex justify-center items-center z-50">
 					<ScrollArea className="w-1/4 h-1/2 overflow-auto bg-white p-4 rounded-lg">

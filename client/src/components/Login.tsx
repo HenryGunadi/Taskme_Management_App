@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import {LoginUserPayload} from './Types';
 import {Alert, LinearProgress} from '@mui/material';
+import images from '../assets/image';
 
 export const backendUrl: string = 'http://localhost:8080/api/v1';
 
@@ -39,8 +40,6 @@ const Login: React.FC = () => {
 				const token = response.data.token;
 				if (token) {
 					localStorage.setItem('token', token);
-					console.log('Login successful: ', response.data);
-					console.log('token from login : ', localStorage.getItem('token'));
 					navigateToHome();
 				} else {
 					console.error('Login failed: Token not received');
@@ -77,31 +76,44 @@ const Login: React.FC = () => {
 
 	return (
 		<div className="relative w-screen h-screen flex items-center justify-center">
+			<div className="absolute flex laptop:left-6 left-3 top-4 gap-2">
+				<h1 className="text-2xl text-indigo-400 font-bold tracking-wider">TASKME</h1>
+				<img src={images.target} alt="" className="w-8 h-auto object-cover " style={{imageRendering: 'auto'}} />
+			</div>
 			{/* login page */}
-			<div className="w-1/2 h-3/4 border border-black flex">
-				<div className="w-1/2 border-r-2 border-black pl-2 pt-2 flex flex-col justify-center items-center">
-					<h1>Welcome Back</h1>
-					<form action="" className="flex justify-center flex-col" onSubmit={handleLogin}>
+			<div className="w-1/2 h-3/4  flex rounded-lg shadow-lg p-4 text-slate-700">
+				<div className="w-1/2 flex flex-col justify-center text-center">
+					<h1 className="font-medium mb-4 text-base">Welcome Back</h1>
+					<form action="" className="flex justify-center flex-col gap-2 text-sm items-center w-full" onSubmit={handleLogin}>
 						<input
 							type="text"
 							placeholder="Email"
-							className="border border-black"
+							className="border rounded-lg py-2 px-3 outline-none w-3/4"
 							name="email"
 							value={loginPayload.email}
 							onChange={handleInputChange}
 							required
 						/>
 						<input
-							type="text"
+							type="password"
 							placeholder="Password"
-							className="border border-black mt-2"
+							className="border rounded-lg py-2 px-3 outline-none mt-2 w-3/4"
 							name="password"
 							value={loginPayload.password}
 							onChange={handleInputChange}
 							required
 						/>
+						<div className="w-3/4 text-start ">
+							<a href="" className="">
+								Forgot password ?
+							</a>
+						</div>
 
-						<button className="block" type="submit" onClick={handleAlert}>
+						<button
+							className="block text-base mt-2 px-3 py-2 w-3/4 rounded-lg font-medium mb-2 text-white bg-indigo-500"
+							type="submit"
+							onClick={handleAlert}
+						>
 							Sign in
 						</button>
 					</form>
@@ -116,7 +128,9 @@ const Login: React.FC = () => {
 				</div>
 
 				{/* pictures */}
-				<div></div>
+				<div className="w-1/2 h-full flex items-center">
+					<img src={images.task} alt="" className="w-full h-auto object-cover object-center" />
+				</div>
 			</div>
 
 			{loading && (

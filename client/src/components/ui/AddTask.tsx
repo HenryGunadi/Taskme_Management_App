@@ -76,10 +76,6 @@ const AddTask: React.FC<{data: TaskDataFetch | null}> = ({data}) => {
 						'Content-Type': 'application/json',
 					},
 				});
-
-				if (response.status === 200) {
-					console.log('task update response : ', response.data);
-				}
 			} catch (err) {
 				console.error('error updating task : ', err);
 			}
@@ -95,7 +91,7 @@ const AddTask: React.FC<{data: TaskDataFetch | null}> = ({data}) => {
 	return (
 		<AddTaskContext.Provider value={{handleCalendarUpdate, handlePriority}}>
 			<div className="fixed flex z-50 bg-black bg-opacity-50 justify-center items-center inset-0">
-				<div className="bg-white rounded-lg border-slate-800 border p-6 overflow-y-auto flex flex-col w-1/3 h-3/4">
+				<div className="bg-white rounded-lg border-slate-800 border p-6 overflow-y-auto flex flex-col tablet:w-1/3 h-2/4 tablet:h-3/4 w-full mx-4">
 					<div className="w-full flex justify-end">
 						<img src={images.xIcon} alt="" className="hover:cursor-pointer" onClick={toggleOffAddTask} />
 					</div>
@@ -109,7 +105,7 @@ const AddTask: React.FC<{data: TaskDataFetch | null}> = ({data}) => {
 						value={data && datas ? datas.title : task.title}
 						onChange={data ? handleInputss : handleInputs}
 						name="title"
-						className="border border-slate-600 outline-none w-full bg-slate-100 rounded-md px-4 py-2 text-sm mt-1 mb-4"
+						className="border border-slate-600 outline-none w-full bg-slate-100 rounded-md laptop:py-2 laptop:px-4 px-3 py-1 text-sm mt-1 mb-4"
 						required
 					/>
 
@@ -119,18 +115,18 @@ const AddTask: React.FC<{data: TaskDataFetch | null}> = ({data}) => {
 					<textarea
 						name="description"
 						id="taskDesc"
-						className="border border-slate-600 outline-none w-full bg-slate-100 rounded-md px-4 py-2 text-sm mt-1 mb-4 h-2/5"
+						className="border border-slate-600 outline-none w-full bg-slate-100 rounded-md tablet:py-2 tablet:px-4 px-3 py-1 text-sm mt-1 mb-4 laptop:h-2/5 min-h-24 max-h-32"
 						onChange={data ? handleInputss : handleTextArea}
 						value={data && datas ? datas.description : task.description}
 					></textarea>
 
-					<div className="flex gap-10 py-4">
+					<div className="flex gap-3 py-4 tablet:flex-row flex-col">
 						<ComboboxPopover priorities={data ? data.priority : priority} />
 
 						<DatePickerDemo unixTimeSeconds={data && datas ? datas.dueDate : 0} />
 					</div>
 
-					<div className="flex font-medium text-white justify-center py-4">
+					<div className="flex font-medium text-white justify-center py-4 w-full">
 						<button className="px-4 py-2 rounded-md bg-indigo-500 mx-2" onClick={toggleOffAddTask}>
 							Close
 						</button>

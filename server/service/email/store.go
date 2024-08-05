@@ -3,11 +3,11 @@ package email
 import (
 	"context"
 	"fmt"
-	"go/types"
 	"time"
 
 	"cloud.google.com/go/firestore"
 	"github.com/HenryGunadi/Taskme_Management_App/server/types"
+	"google.golang.org/api/iterator"
 )
 
 type Store struct {
@@ -18,8 +18,8 @@ func NewStore(firestoreClient *firestore.Client) *Store {
 	return &Store{firestore: firestoreClient}
 }
 
-func (s *Store) DueDateTasks(ctx context.Context, userID string) ([]*firestore.DocumentSnapshot, error) {
-	var dueDatesTasks []*
+func (s *Store) DueDateTasks(ctx context.Context, userID string) ([]*types.Task, error) {
+	var dueDateTasks []*types.Task
 	// in dates
 	now := time.Now()
 	oneDayFromNow := now.Add(24 * time.Hour)
@@ -41,20 +41,19 @@ func (s *Store) DueDateTasks(ctx context.Context, userID string) ([]*firestore.D
 			return nil, err
 		}
 
+		dueDateTask := new(types.Task)
+		if err := doc.DataTo(dueDateTask); err != nil {
+			return nil, err
+		}
 
-		if err := doc.DataTo()
+		dueDateTasks = append(dueDateTasks, dueDateTask)
 	}
 
-	// docs, err := query.Documents(ctx).GetAll()
-	// if err != nil {
-	// 	return nil, fmt.Errorf("error querying docs")
-	// }
+	if len(dueDateTasks) == 0 {
+		return nil, nil
+	}
 
-	// if len(docs) == 0 {
-	// 	return nil, nil
-	// }	
-
-	return docs, nil
+	return dueDateTasks, nil
 }
 
 func (s *Store) GetUserEmailsToSendEmail(ctx context.Context) ([]string, error) {

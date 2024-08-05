@@ -48,7 +48,6 @@ const MainDashboard: React.FC = () => {
 
 			if (response.status === 200 && response.data) {
 				setDashboardTasks(response.data);
-				console.log('dashboard data from fetch : ', response.data);
 			}
 		} catch (err) {
 			console.error('error getting tasks : ', err);
@@ -77,9 +76,7 @@ const MainDashboard: React.FC = () => {
 	const [displayMsg, setDisplayMsg] = useState<string | null>(null);
 	useEffect(() => {
 		const time: string[] = new Date().toLocaleTimeString().split(':');
-		console.log('time array : ', time);
 		const amOrPm: string | undefined = time.find((msg) => msg.includes('AM') || msg.includes('PM'));
-		console.log('AM OR PM : ', amOrPm);
 		if (amOrPm?.includes('AM')) {
 			setDisplayMsg('Good morning,');
 		} else if (amOrPm?.includes('PM') && parseInt(time[0]) >= 0 && parseInt(time[0]) <= 18) {
@@ -172,7 +169,6 @@ const MainDashboard: React.FC = () => {
 			});
 
 			if (response.status === 200 && response.data) {
-				console.log('daily tasks fetched : ', response.data);
 				setDailyTasksFetch(response.data);
 			}
 		} catch (err) {
@@ -231,14 +227,14 @@ const MainDashboard: React.FC = () => {
 				dailyTaskFetch,
 			}}
 		>
-			<div className="bg-slate-100 px-6 py-4 text-base w-full h-auto">
+			<div className="bg-slate-100 tablet:px-6 px-3 py-6 text-base w-full h-auto">
 				<div className="mb-10">
 					<h1 className="font-bold text-2xl text-slate-800 pb-2">{`${displayMsg} ${firstName} ! 😊 `}</h1>
 					<p className="text-slate-500 font-medium">Welcome back</p>
 				</div>
 
-				<div className="w-full gap-5 flex mb-16">
-					<div className="w-1/3 bg-white rounded-lg shadow-sm p-4 flex items-center gap-2">
+				<div className="w-full gap-5 flex flex-col tablet:flex-row mb-10">
+					<div className="tablet:w-1/3 w-full bg-white rounded-lg shadow-sm  p-2 tablet:p-4 flex items-center gap-2">
 						<div className="w-1/2">
 							<PieChartUi totalOrToDosOrDailyTask={true} />
 						</div>
@@ -253,7 +249,7 @@ const MainDashboard: React.FC = () => {
 						</div>
 					</div>
 
-					<div className="w-1/3 bg-white rounded-lg shadow-sm p-4 flex items-center gap-2">
+					<div className="tablet:w-1/3 w-full bg-white rounded-lg shadow-sm  p-2 tablet:p-4 flex items-center gap-2">
 						<div className="w-1/2">
 							<PieChartUi totalOrToDosOrDailyTask={false} />
 						</div>
@@ -267,7 +263,7 @@ const MainDashboard: React.FC = () => {
 						</div>
 					</div>
 
-					<div className="w-1/3 bg-white rounded-lg shadow-sm p-4 flex items-center gap-2">
+					<div className="tablet:w-1/3 w-full bg-white rounded-lg shadow-sm  p-2 tablet:p-4 flex items-center gap-2">
 						<div className="w-1/2">
 							<PieChartUi totalOrToDosOrDailyTask={null} />
 						</div>
@@ -282,9 +278,9 @@ const MainDashboard: React.FC = () => {
 					</div>
 				</div>
 
-				<div className="w-full flex gap-10">
+				<div className="w-full flex flex-col tablet:flex-row gap-10">
 					{/* Daily tasks */}
-					<div className="w-1/2 bg-white rounded-lg shadow-sm h-1/2">
+					<div className="w-full  tablet:w-1/2 bg-white rounded-lg shadow-sm h-1/2">
 						<div className="flex justify-between py-4 px-4">
 							<h1 className="text-slate-900 font-medium text-base">Daily Tasks</h1>
 
@@ -346,7 +342,7 @@ const MainDashboard: React.FC = () => {
 					</div>
 
 					{/* To dos */}
-					<div className="w-1/2 bg-white rounded-lg shadow-sm h-1/2">
+					<div className="w-full tablet:w-1/2 bg-white rounded-lg shadow-sm h-1/2">
 						<div className="flex justify-between py-4 px-4">
 							<h1 className="text-slate-900 font-medium text-base">To-dos</h1>
 

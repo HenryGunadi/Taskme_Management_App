@@ -2,8 +2,6 @@ package types
 
 import (
 	"context"
-
-	"cloud.google.com/go/firestore"
 )
 
 type UserStore interface {
@@ -36,7 +34,7 @@ type UploadStore interface {
 }
 
 type EmailStore interface {
-	DueDateTasks(ctx context.Context, userID string) ([]*firestore.DocumentSnapshot, error)
+	DueDateTasks(ctx context.Context, userID string) ([]*Task, error)
 	GetUserEmailsToSendEmail(ctx context.Context) ([]string, error)
 }
 

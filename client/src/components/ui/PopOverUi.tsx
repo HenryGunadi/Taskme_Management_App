@@ -62,7 +62,7 @@ const ComboboxPopover: React.FC<PopoverProps> = ({priorities}) => {
 	}, [selectedStatus?.value]);
 
 	return (
-		<div className="flex items-center space-x-4">
+		<div className="flex items-center space-x-4 relative">
 			<p className="text-sm text-muted-foreground">Status</p>
 			<Popover open={open} onOpenChange={setOpen}>
 				<PopoverTrigger asChild>
@@ -83,7 +83,7 @@ const ComboboxPopover: React.FC<PopoverProps> = ({priorities}) => {
 						)}
 					</Button>
 				</PopoverTrigger>
-				<PopoverContent className="p-0" side="right" align="start">
+				<PopoverContent className="p-0" side="bottom" align="center">
 					<Command>
 						<CommandInput placeholder="Change status..." />
 						<CommandList>

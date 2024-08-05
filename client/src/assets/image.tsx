@@ -18,8 +18,15 @@ import target from './target.png';
 import plus from './plus (1).svg';
 import chevUp from './chevron-up.svg';
 import chevDown from './chevron-down.svg';
+import doubleChevRight from './chevrons-right (1).svg';
+import doubleChevRightWhite from './chevrons-right (2).svg';
+import settingsGray from './settings (1).svg';
+import lockGray from './lock (1).svg';
+import task from './Add tasks-bro.svg';
+import forgotPass from './security.png';
 
 const images = {
+	forgotPass,
 	user,
 	settings,
 	search,
@@ -40,6 +47,11 @@ const images = {
 	plus,
 	chevUp,
 	chevDown,
+	doubleChevRight,
+	doubleChevRightWhite,
+	settingsGray,
+	lockGray,
+	task,
 };
 
 export default images;

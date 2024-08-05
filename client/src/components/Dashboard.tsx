@@ -5,13 +5,15 @@ import {Route, Routes} from 'react-router-dom';
 import UserProfile from './UserProfile';
 import {backendUrl} from './Login';
 import axios from 'axios';
-import {DashboardContextType, AlertInterface, TaskDataInterface, TaskDataFetch} from './Types';
+import {DashboardContextType, AlertInterface, TaskDataInterface, TaskDataFetch, SidebarContext, NotificationContext} from './Types';
 import {Alert, LinearProgress} from '@mui/material';
 import MainDashboard from './MainDashboard';
 import Task from './Task';
 import AddTask from './ui/AddTask';
 import Notification from './Notification';
 import AddTaskButton from './ui/AddTaskButton';
+import {setISODay} from 'date-fns';
+import images from '../assets/image';
 
 export const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
@@ -68,7 +70,6 @@ const Dashboard: React.FC = () => {
 						},
 					});
 					if (response.status == 200 && response.data) {
-						console.log('user data : ', response.data);
 						localStorage.setItem('firstName', response.data.firstName);
 						localStorage.setItem('lastName', response.data.lastName);
 						localStorage.setItem('email', response.data.email);
@@ -241,10 +242,6 @@ const Dashboard: React.FC = () => {
 	};
 
 	useEffect(() => {
-		if (task.priority) {
-			console.log('handle pop over: ', task.priority);
-		}
-
 		if (task.dueDate) {
 			const {days, hours, minutes} = getTimeDifference(task.dueDate);
 			setTime({
@@ -301,9 +298,29 @@ const Dashboard: React.FC = () => {
 		}
 	};
 
+	const [isSidebars, setIsSidebar] = useState<boolean>(false);
+
+	const handleIsSidebars = () => {
+		setIsSidebar((prev) => !prev);
+	};
+
+	const SidebarContext: SidebarContext = {
+		handleIsSidebar: handleIsSidebars,
+		isSidebar: isSidebars,
+	};
+
+	const [isNotification, setIsNotification] = useState<boolean>(false);
+
+	const NotificationCtx: NotificationContext = {
+		isNotification: isNotification,
+		setIsNotification: setIsNotification,
+	};
+
 	return (
 		<DashboardContext.Provider
 			value={{
+				NotificationCtx,
+				SidebarContext,
 				anyTaskChanges,
 				handleAnyTaskChanges,
 				toggleEditUi,
@@ -331,7 +348,7 @@ const Dashboard: React.FC = () => {
 		>
 			<div className="relative text-slate-950 bg-white flex w-screen h-screen box-border">
 				<Sidebar />
-				<div className="w-10/12 flex flex-col bg-slate-100">
+				<div className="laptop:w-10/12 w-full flex flex-col bg-slate-100">
 					<Navbar />
 
 					<div className="flex flex-col overflow-x-hidden flex-1">
@@ -345,10 +362,7 @@ const Dashboard: React.FC = () => {
 				</div>
 
 				{/* overlay effect command*/}
-				<div
-					className={`fixed inset-0 ${isCommand || isAddTask ? 'bg-black opacity-50' : 'hidden'} w-full h-full`}
-					onClick={toggleOffCommand}
-				></div>
+				<div className={`fixed inset-0 ${isSidebars ? 'bg-black opacity-50' : 'hidden'} w-full h-full`} onClick={toggleOffCommand}></div>
 
 				{/* alert ui */}
 				{alert.isLoading === true && (

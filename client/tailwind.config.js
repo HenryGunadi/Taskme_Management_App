@@ -1,3 +1,5 @@
+const {Laptop} = require('lucide-react');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	darkMode: 'class',
@@ -71,6 +73,14 @@ module.exports = {
 			},
 			translate: {
 				'1/2': '0.5px',
+			},
+			screens: {
+				tablet: '800px',
+				laptop: '1020px',
+				desktop: '1920px',
+			},
+			fontFamily: {
+				nunito: ['Nunito', 'sans-serif'],
 			},
 		},
 	},

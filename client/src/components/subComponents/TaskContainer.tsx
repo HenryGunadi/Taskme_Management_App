@@ -26,18 +26,16 @@ const TaskContainer: React.FC<TaskContainerProps> = ({data}) => {
 
 				<div className="flex gap-2">
 					<DeleteTask taskID={data.taskID} />
-					<img
-						src={images.edit}
-						alt=""
-						className="w-5 h-auto min-w-5 object-cover hover:cursor-pointer"
+					<i
+						className="text-slate-500 fa-regular fa-pen-to-square text-lg hover:cursor-pointer transition duration-300 hover:opacity-50"
 						onClick={() => {
 							toggleEdited(data);
 						}}
-					/>
+					></i>
 				</div>
 			</div>
 
-			<h1 className="font-medium pb-2 text-lg tracking-wide">
+			<h1 className="font-medium pb-2 text-base tracking-wide">
 				{data.title && data.title.charAt(0).toUpperCase() + data.title.slice(1).toLowerCase()}
 			</h1>
 

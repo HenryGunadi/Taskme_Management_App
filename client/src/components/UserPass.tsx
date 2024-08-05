@@ -26,7 +26,6 @@ const UserPass: React.FC = () => {
 			try {
 				const lenPass: number = await parseInt(localStorage.getItem('passwordLen') || '');
 				setOldPass(generateRandomPass(lenPass));
-				console.log('oldpass : ', oldPass);
 			} catch (err) {
 				console.error('error getting oldpass', err);
 				toggleAlert(null, '', false);
@@ -121,6 +120,12 @@ const UserPass: React.FC = () => {
 		}
 		handleInputSettings(e);
 	};
+
+	useEffect(() => {
+		if (confirmPass !== newPass) {
+			setSame(false);
+		}
+	}, [newPass]);
 
 	let hasError = validateMsg.some((msg) => msg.error);
 

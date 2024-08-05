@@ -30,32 +30,20 @@ const Command: React.FC = () => {
 		},
 		{
 			id: 3,
-			route: 'in-progress',
-			name: 'In-Progress',
-			type: 'link',
-		},
-		{
-			id: 4,
-			route: 'completed',
-			name: 'Completed',
-			type: 'link',
-		},
-		{
-			id: 5,
-			route: 'trash',
-			name: 'Trash',
-			type: 'link',
-		},
-		{
-			id: 6,
 			route: 'user/profile',
 			name: 'Profile',
 			type: 'user',
 		},
 		{
-			id: 7,
+			id: 4,
 			route: 'user/password',
 			name: 'Password',
+			type: 'user',
+		},
+		{
+			id: 5,
+			route: 'notification',
+			name: 'Notification',
 			type: 'user',
 		},
 	];
@@ -74,17 +62,25 @@ const Command: React.FC = () => {
 
 	return (
 		<div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-			<div className="w-1/2 h-1/2 border border-slate-800 rounded-md flex flex-col z-50 bg-slate-50">
+			<div className="w-full mx-4 tablet:w-1/2 h-1/2 border border-slate-800 rounded-md flex flex-col z-50 bg-slate-50">
 				{/* search bar */}
 				<form action="" className="border-b border-slate-500 px-4 flex items-center w-full p-4">
 					<img src={images.search} alt="" className="w-4 h-auto mr-4" />
 					<input
 						type="text"
 						placeholder="Type a command or search..."
-						className="bg-transparent w-1/2 outline-none"
+						className="bg-transparent laptop:w-1/2 outline-none w-3/4"
 						value={inputValue}
 						onChange={hanldeInputValue}
 					/>
+					<div className="flex justify-end flex-1 ">
+						<img
+							src={images.xIcon}
+							alt=""
+							className="w-4 h-auto hover:cursor-pointer transition hover:opacity-50"
+							onClick={toggleCommand}
+						/>
+					</div>
 				</form>
 				<ScrollArea className="p-4">
 					<div className="py-1">
@@ -101,7 +97,7 @@ const Command: React.FC = () => {
 									}}
 								>
 									<img src={images.fileIcon} alt="" className="w-6 h-auto mr-2" />
-									<h1 className="text-base">{item.name}</h1>
+									<h1 className="laptop:text-base text-sm">{item.name}</h1>
 								</div>
 							))}
 					</div>
@@ -120,7 +116,7 @@ const Command: React.FC = () => {
 									}}
 								>
 									<img src={images.fileIcon} alt="" className="w-6 h-auto mr-2" />
-									<h1 className="text-base">{item.name}</h1>
+									<h1 className="laptop:text-base text-sm">{item.name}</h1>
 								</div>
 							))}
 					</div>

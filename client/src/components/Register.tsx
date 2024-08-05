@@ -34,7 +34,6 @@ const Register: React.FC = () => {
 
 			window.alert('Sign up successful');
 			navigateToLogin();
-			console.log('Registration successful: ', response.data);
 		} catch (err) {
 			console.error(`Registration failed: `, err);
 			window.alert('user already exists');
@@ -121,12 +120,12 @@ const Register: React.FC = () => {
 	return (
 		<div className="w-screen h-screen flex justify-center items-center">
 			{/* register container */}
-			<div className="w-1/3 h-3/4 border border-black flex flex-col justify-center items-center">
-				<h1>Sign up</h1>
+			<div className="w-1/3 h-3/4  flex flex-col justify-center items-center rounded-lg shadow-lg">
+				<h1 className="font-medium">Sign up</h1>
 				<form action="" className="flex flex-col" onSubmit={handleFormSubmit}>
 					<input
 						type="text"
-						className="mt-2 border border-black p-2"
+						className="mt-2 border px-3 py-2 rounded-lg outline-none"
 						placeholder="First Name"
 						name="firstName"
 						value={formData.firstName}
@@ -136,7 +135,7 @@ const Register: React.FC = () => {
 					/>
 					<input
 						type="text"
-						className="mt-2 border border-black p-2"
+						className="mt-2 border px-3 py-2 rounded-lg outline-none"
 						placeholder="Last Name"
 						name="lastName"
 						value={formData.lastName}
@@ -146,7 +145,7 @@ const Register: React.FC = () => {
 					/>
 					<input
 						type="email"
-						className="mt-2 border border-black p-2"
+						className="mt-2 border px-3 py-2 rounded-lg outline-none"
 						placeholder="Email"
 						name="email"
 						value={formData.email}
@@ -156,7 +155,7 @@ const Register: React.FC = () => {
 					/>
 					<input
 						type="password"
-						className="mt-2 border border-black p-2"
+						className="mt-2 border px-3 py-2 rounded-lg outline-none"
 						placeholder="Password"
 						name="password"
 						value={formData.password}
@@ -175,7 +174,7 @@ const Register: React.FC = () => {
 						</ul>
 					)}
 
-					<button type="submit" className="m-2">
+					<button type="submit" className="font-medium px-3 py-2 bg-indigo-500 mt-4 rounded-lg text-white">
 						Submit
 					</button>
 				</form>

@@ -59,8 +59,8 @@ const FileUpload: React.FC = () => {
 
 	return (
 		<>
-			<div className="w-full flex items-center ml-4 text-slate-200 font-medium">
-				<div className="relative h-fit bg-slate-800 px-4 py-2 rounded-md hover:cursor-pointer mr-4 hover:opacity-70 duration-100 ease-in">
+			<div className="tablet:w-3/4 flex items-center text-slate-200 font-medium mb-10 text-sm tablet:ml-0 ml-3 gap-3">
+				<div className="relative h-fit bg-slate-800 px-3 py-2  rounded-md hover:cursor-pointer hover:opacity-70 duration-300 w-fit">
 					<h1>Select Picture</h1>
 					<input
 						type="file"
@@ -70,7 +70,7 @@ const FileUpload: React.FC = () => {
 					/>
 				</div>
 				{file ? (
-					<button onClick={handleUpload} className="bg-slate-800 rounded-md px-4 py-2">
+					<button onClick={handleUpload} className="bg-slate-800 rounded-md px-3 py-2">
 						Save
 					</button>
 				) : (

@@ -10,7 +10,6 @@ import {
 	AlertDialogTrigger,
 } from './alert-dialog';
 
-import images from '../../assets/image';
 import axios from 'axios';
 import {backendUrl} from '../Login';
 import {DashboardContextType, FinishTaskProps, TaskType} from '../Types';
@@ -49,7 +48,7 @@ const DeleteTask: React.FC<FinishTaskProps> = ({taskID}) => {
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger>
-				<img src={images.trash} alt="" className="w-5 h-auto min-w-5 object-cover hover:cursor-pointer" />
+				<i className="fa-regular fa-trash-can text-slate-500 text-lg transition duration-300 hover:cursor-pointer hover:opacity-50"></i>
 			</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>

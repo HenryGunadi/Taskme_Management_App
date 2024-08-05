@@ -71,7 +71,19 @@ export interface DashboardContextType {
 	toggleEditUi: () => void;
 	handleAnyTaskChanges: (state: boolean) => void;
 	anyTaskChanges: boolean;
+	SidebarContext: SidebarContext;
+	NotificationCtx: NotificationContext;
 } //
+
+export type NotificationContext = {
+	isNotification: boolean;
+	setIsNotification: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export interface SidebarContext {
+	handleIsSidebar: () => void;
+	isSidebar: boolean;
+}
 
 export interface UserRoutes {
 	route: string;
@@ -202,4 +214,18 @@ export type TotalTasksType = {
 	totalTasks: number;
 	finishedTotalTasks: number;
 	unfinishedTotalTasks: number;
+};
+
+export interface Task {
+	userID: string;
+	title: string;
+	status: boolean | null;
+	priority: string;
+	dueDate: number;
+	description: string;
+}
+
+export type SidebarLinks = {
+	name: string;
+	link: string;
 };

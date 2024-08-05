@@ -6,6 +6,7 @@ import {UserRoutes, User, UserSettingsCtx, DashboardContextType} from './Types';
 import axios from 'axios';
 import {backendUrl} from './Login';
 import {DashboardContext} from './Dashboard';
+import images from '../assets/image';
 
 export interface FileInterface {
 	togglePreview: (url: string) => void;
@@ -86,7 +87,6 @@ const UserProfile: React.FC = () => {
 					},
 				});
 				if (response.status === 200) {
-					console.log('changing user setting response : ', response.data);
 					// Update localStorage with new settings
 					localStorage.setItem('firstName', dataSettings.firstName);
 					localStorage.setItem('lastName', dataSettings.lastName);
@@ -105,45 +105,45 @@ const UserProfile: React.FC = () => {
 
 	return (
 		<FileUploadContext.Provider value={{togglePreview, imgFilePreview}}>
-			<div className="py-4 px-6 flex flex-col flex-grow overflow-x-hidden">
+			<div className="py-4 px-3 tablet:px-6 flex flex-col flex-grow overflow-x-hidden">
 				<h1 className="text-xl font-semibold pb-2">Account settings</h1>
 
 				{/* account settings main container */}
 				<div className="flex w-full py-2">
 					{/* mini side-bar */}
-					<div className="flex flex-col bg-white h-fit py-4 w-1/5 rounded-2xl">
+					<div className="tablet:flex flex-col bg-white h-fit py-4 w-1/5 rounded-lg hidden shadow-sm font-medium gap-1">
 						<div
-							className="py-2 px-4 hover:cursor-pointer"
+							className="py-2 px-4 hover:cursor-pointer flex gap-2"
 							onClick={() => {
 								navigateTo(userRoutes[0].route);
 							}}
 						>
-							<img src="" alt="" />
-							<h1>Profile settings</h1>
+							<img src={images.settingsGray} alt="" className="w-4" />
+							<h1 className="hover:underline transition hover:cursor-pointer duration-300">Profile settings</h1>
 						</div>
 						<div
-							className="py-2 px-4 hover:cursor-pointer"
+							className="py-2 px-4 hover:cursor-pointer flex gap-2"
 							onClick={() => {
 								navigateTo(userRoutes[1].route);
 							}}
 						>
-							<img src="" alt="" />
-							<h1>Password</h1>
+							<img src={images.lockGray} alt="" className="w-4" />
+							<h1 className="hover:underline transition hover:cursor-pointer duration-300">Password</h1>
 						</div>
 						<div
-							className="py-2 px-4 hover:cursor-pointer"
+							className="py-2 px-4 hover:cursor-pointer flex gap-2"
 							onClick={() => {
 								navigateTo(userRoutes[2].route);
 							}}
 						>
-							<img src="" alt="" />
-							<h1>Notifications</h1>
+							<img src={images.notification} alt="" className="w-4" />
+							<h1 className="hover:underline transition hover:cursor-pointer duration-300">Notifications</h1>
 						</div>
 					</div>
 
 					{/* main settings */}
 					<UpdateUserSettingCtx.Provider value={{dataSettings, handleInputSettings, handlePostSettings, isChanged}}>
-						<div className="bg-white px-6 py-6 w-4/5 flex font-normal text-sm text-slate-900 tracking-wide rounded-2xl border border-black ml-6">
+						<div className="bg-white px-6 py-6 w-full tablet:w-4/5 font-normal text-sm text-slate-900 tracking-wide rounded-lg tablet:ml-6 shadow-sm">
 							<Routes>
 								<Route path="/profile" element={<ProfileSettings />} />
 								<Route path="/password" element={<UserPass />} />
