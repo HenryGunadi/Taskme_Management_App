@@ -70,9 +70,7 @@ const FinishTask: React.FC<FinishTaskType> = ({taskID, dashboard, toggleComplete
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Complete task?</AlertDialogTitle>
-					<AlertDialogDescription>
-						This action cannot be undone, but you can still view completed tasks in the 'Completed' section.
-					</AlertDialogDescription>
+					<AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>

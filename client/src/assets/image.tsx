@@ -24,8 +24,12 @@ import settingsGray from './settings (1).svg';
 import lockGray from './lock (1).svg';
 import task from './Add tasks-bro.svg';
 import forgotPass from './security.png';
+import eyeGray from './eye (1).svg';
+import eyeGrayOff from './eye-off (1).svg';
 
 const images = {
+	eyeGray,
+	eyeGrayOff,
 	forgotPass,
 	user,
 	settings,

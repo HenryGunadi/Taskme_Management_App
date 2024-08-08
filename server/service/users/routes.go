@@ -16,10 +16,11 @@ import (
 
 type Handler struct {
 	store types.UserStore
+	emailStore types.EmailStore
 }
 
-func NewHandler(store types.UserStore) *Handler {
-	return &Handler{store: store}
+func NewHandler(store types.UserStore, emailStore types.EmailStore) *Handler {
+	return &Handler{store: store, emailStore: emailStore}
 }
 
 func (h *Handler) RegisteredRoutes(router *mux.Router) {
@@ -27,6 +28,7 @@ func (h *Handler) RegisteredRoutes(router *mux.Router) {
 	router.HandleFunc("/login", h.handleLogin).Methods("POST")
 	router.HandleFunc("/settings", h.handleUserSettings).Methods("POST")
 	router.HandleFunc("/user", h.handleFetchUser).Methods("GET")
+	router.HandleFunc("/settings", h.handleForgotPass).Methods("PATCH")
 }
 
 func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
@@ -194,5 +196,64 @@ func (h *Handler) handleFetchUser(w http.ResponseWriter, r *http.Request) {
 		"lastName": user.LastName,
 		"email": user.Email,
 		"bio": user.Bio,
+	})
+}
+
+func (h *Handler) handleForgotPass(w http.ResponseWriter, r *http.Request) {
+	var payload types.ForgotPassPayload
+	ctx := context.Background()
+
+	// get token from header request
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user is not authorized"))
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	_, err := auth.ValidateUser(token)
+	if err != nil {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user is not authorized : %v", err))
+		return
+	}
+
+	// check blacklisted otp tokens
+	if err := h.emailStore.CheckBlackListsToken(ctx, token); err != nil {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("otp token is invalid"))
+		return
+	}
+
+	// parse JSON payload
+	if err := utils.ParseJSON(r, &payload); err != nil {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid JSON payload %v", err))
+		return
+	}
+
+	// check validation payload
+	if err := utils.Validate.Struct(payload); err != nil {
+		errors := err.(validator.ValidationErrors)
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("validate payload error : %v", errors))
+		return
+	}
+
+	newPassHashed, err := auth.HashedPassword(payload.NewPass)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("error creating new hashed password : %v", err))
+		return
+	}
+
+	if err := h.store.ForgotPassword(ctx, payload, newPassHashed); err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("error handling forgot password : %v", err))
+		return
+	}
+
+	if err := h.emailStore.BlackListJWT(ctx, token); err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("error blacklisting otp jwt token : %v", err))
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusOK, map[string]bool{
+		"status": true,
 	})
 }

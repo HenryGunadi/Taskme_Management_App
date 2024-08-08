@@ -11,6 +11,7 @@ import {ScrollArea} from './scroll-area';
 import {ScrollAreaViewport} from '@radix-ui/react-scroll-area';
 import images from '../../assets/image';
 import {DashboardContext} from '../Dashboard';
+import {limitTitleToLetters} from '../services/TrimLetters';
 
 export type CalendarContextType = {
 	notFinishedTasks: Date[] | undefined;
@@ -79,7 +80,7 @@ export function CalendarDemo() {
 			<Calendars mode="multiple" selected={notFinishedTasks} className="rounded-md w-full shadow-md border flex justify-center" />
 			{isClicked && (
 				<div className="fixed inset-0 flex justify-center items-center z-50">
-					<ScrollArea className="w-1/4 h-1/2 overflow-auto bg-white p-4 rounded-lg">
+					<ScrollArea className="laptop:w-1/4 w-full mx-4 h-1/2 overflow-auto bg-white p-4 rounded-lg">
 						<div className="w-full flex justify-between pb-2">
 							<h1 className="text-base">{dayStr}</h1>
 
@@ -97,6 +98,7 @@ export function CalendarDemo() {
 								calendarTasks
 									.filter((task: DashboardTasksType) => getUnixTimeSecondsWithoutTime(task.dueDate) === daySelected)
 									.map((task: DashboardTasksType, index: number) => {
+										const trimmedTitle: string = limitTitleToLetters(task.title, 10);
 										return (
 											<div key={index} className="flex w-full pb-2 justify-between items-center">
 												<div className="flex items-center gap-2">
@@ -107,7 +109,7 @@ export function CalendarDemo() {
 															(task.priority === 'low' && 'bg-green-500')
 														}`}
 													></div>
-													<h1 className="">{task.title}</h1>
+													<h1 className="">{trimmedTitle}</h1>
 												</div>
 
 												<h1 className="text-slate-500 text-sm">Ongoing</h1>

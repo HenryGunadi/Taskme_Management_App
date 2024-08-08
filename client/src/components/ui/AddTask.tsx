@@ -91,7 +91,7 @@ const AddTask: React.FC<{data: TaskDataFetch | null}> = ({data}) => {
 	return (
 		<AddTaskContext.Provider value={{handleCalendarUpdate, handlePriority}}>
 			<div className="fixed flex z-50 bg-black bg-opacity-50 justify-center items-center inset-0">
-				<div className="bg-white rounded-lg border-slate-800 border p-6 overflow-y-auto flex flex-col tablet:w-1/3 h-2/4 tablet:h-3/4 w-full mx-4">
+				<div className="bg-white rounded-lg border-slate-800 border p-6 overflow-y-auto flex flex-col tablet:w-1/3 h-3/4 w-full mx-4">
 					<div className="w-full flex justify-end">
 						<img src={images.xIcon} alt="" className="hover:cursor-pointer" onClick={toggleOffAddTask} />
 					</div>

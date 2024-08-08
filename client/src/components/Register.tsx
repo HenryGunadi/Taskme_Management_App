@@ -118,14 +118,14 @@ const Register: React.FC = () => {
 	const hasError: boolean = validateMsgRegis.some((msg) => msg.error);
 
 	return (
-		<div className="w-screen h-screen flex justify-center items-center">
+		<div className="w-screen h-screen flex justify-center items-center text-sm">
 			{/* register container */}
-			<div className="w-1/3 h-3/4  flex flex-col justify-center items-center rounded-lg shadow-lg">
-				<h1 className="font-medium">Sign up</h1>
-				<form action="" className="flex flex-col" onSubmit={handleFormSubmit}>
+			<div className="w-full laptop:w-1/3 h-3/4  flex flex-col justify-center items-center rounded-lg laptop:shadow-lg m-6">
+				<h1 className="font-bold text-xl ">Sign up</h1>
+				<form action="" className="flex flex-col w-full items-center" onSubmit={handleFormSubmit}>
 					<input
 						type="text"
-						className="mt-2 border px-3 py-2 rounded-lg outline-none"
+						className="mt-2 border px-3 py-2 rounded-lg outline-none w-3/4"
 						placeholder="First Name"
 						name="firstName"
 						value={formData.firstName}
@@ -135,7 +135,7 @@ const Register: React.FC = () => {
 					/>
 					<input
 						type="text"
-						className="mt-2 border px-3 py-2 rounded-lg outline-none"
+						className="mt-2 border px-3 py-2 rounded-lg outline-none w-3/4"
 						placeholder="Last Name"
 						name="lastName"
 						value={formData.lastName}
@@ -145,7 +145,7 @@ const Register: React.FC = () => {
 					/>
 					<input
 						type="email"
-						className="mt-2 border px-3 py-2 rounded-lg outline-none"
+						className="mt-2 border px-3 py-2 rounded-lg outline-none w-3/4"
 						placeholder="Email"
 						name="email"
 						value={formData.email}
@@ -155,7 +155,7 @@ const Register: React.FC = () => {
 					/>
 					<input
 						type="password"
-						className="mt-2 border px-3 py-2 rounded-lg outline-none"
+						className="mt-2 border px-3 py-2 rounded-lg outline-none w-3/4"
 						placeholder="Password"
 						name="password"
 						value={formData.password}
@@ -165,7 +165,7 @@ const Register: React.FC = () => {
 						required
 					/>
 					{isPassword && (
-						<ul>
+						<ul className="my-2 w-3/4">
 							{validateMsgRegis.map((item: any, index: number) => (
 								<li key={index} className={`${item.error ? 'text-red-500' : 'text-slate-500'}`}>
 									{item.errorMsg}
@@ -174,7 +174,7 @@ const Register: React.FC = () => {
 						</ul>
 					)}
 
-					<button type="submit" className="font-medium px-3 py-2 bg-indigo-500 mt-4 rounded-lg text-white">
+					<button type="submit" className="w-3/4 font-medium px-3 py-2 bg-indigo-500 mt-4 rounded-lg text-white">
 						Submit
 					</button>
 				</form>

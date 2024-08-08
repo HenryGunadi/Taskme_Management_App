@@ -2,6 +2,7 @@ package types
 
 import (
 	"context"
+	"time"
 )
 
 type UserStore interface {
@@ -11,6 +12,7 @@ type UserStore interface {
 	UploadImage(ctx context.Context, upload Upload) error
 	ChangeUserSettings(ctx context.Context, userID string, user *User) error
 	GetUserByID(ctx context.Context, userID string) (*User, error)
+	ForgotPassword(ctx context.Context, payload ForgotPassPayload, newPassHashed string) error
 }
 
 type TaskStore interface {
@@ -36,7 +38,14 @@ type UploadStore interface {
 type EmailStore interface {
 	DueDateTasks(ctx context.Context, userID string) ([]*Task, error)
 	GetUserEmailsToSendEmail(ctx context.Context) ([]string, error)
+	SendEmailOTP(ctx context.Context, userEmails []string) (int, error)
+	AddOTPToDatabase(ctx context.Context, otp *Otp) (string, error)
+	ValidateOTP(ctx context.Context, otpPayload OTPValidationPayload) error
+	GenerateJWT(ctx context.Context, secret []byte) (string, error)
+	BlackListJWT(ctx context.Context, token string) error
+	CheckBlackListsToken(ctx context.Context, token string) error
 }
+
 
 type User struct {
 	FirstName string `json:"firstName"`
@@ -72,7 +81,7 @@ type UploadPayload struct {
 
 type TaskPayload struct {
 	Title string `json:"title" validate:"required"`
-	Description string `json:"description" validate:"required"`
+	Description string `json:"description"`
 	Priority *string `json:"priority"`
 	DueDate int64 `json:"dueDate" validate:"required"`
 	Status *bool `json:"status"`
@@ -135,3 +144,28 @@ type SendDailyTask struct {
 }
 
 type ValidateUser func (token string) (int, error)
+
+type EmailPayload struct {
+	Email string `json:"email" validate:"required"`
+}
+
+type Otp struct {
+	Otp int `json:"otp"`
+	ExpiresAt time.Time `json:"expiresAt"`
+	Status bool `json:"status"`
+}
+
+type OTPValidationPayload struct {
+	OtpID string `json:"otpID" validate:"required"`
+	Otp string `json:"otp" validate:"required"`
+}
+
+type JwtBlacklists struct {
+	Token string `json:"token"`
+	Status bool `json:"status"`
+}
+
+type ForgotPassPayload struct {
+	Email string `json:"email" validate:"required"`
+	NewPass string `json:"newPass" validate:"required"`
+}

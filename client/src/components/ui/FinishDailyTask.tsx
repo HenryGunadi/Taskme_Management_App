@@ -66,9 +66,7 @@ const FinishDailyTask: React.FC<FinishDailyTaskType> = ({taskID, task}) => {
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Complete daily task?</AlertDialogTitle>
-					<AlertDialogDescription>
-						This action cannot be undone, but you can still view completed tasks in the 'Completed' section.
-					</AlertDialogDescription>
+					<AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>

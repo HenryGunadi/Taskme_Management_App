@@ -1,8 +1,24 @@
+import React from 'react';
 import {InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from './input-otp';
+import {OtpPayloadType} from '../OTP';
 
-export function InputOTPDemo() {
+type InputOTPDemoProps = {
+	otp: OtpPayloadType;
+	setOtp: React.Dispatch<React.SetStateAction<OtpPayloadType>>;
+};
+
+const InputOTPDemo: React.FC<InputOTPDemoProps> = ({otp, setOtp}) => {
 	return (
-		<InputOTP maxLength={6}>
+		<InputOTP
+			maxLength={4}
+			value={otp.otp}
+			onChange={(value) =>
+				setOtp((prev) => ({
+					...prev,
+					otp: value,
+				}))
+			}
+		>
 			<InputOTPGroup>
 				<InputOTPSlot index={0} />
 				<InputOTPSlot index={1} />
@@ -14,4 +30,6 @@ export function InputOTPDemo() {
 			</InputOTPGroup>
 		</InputOTP>
 	);
-}
+};
+
+export default InputOTPDemo;

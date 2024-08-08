@@ -29,9 +29,13 @@ func (s *APIServer) Run() error {
 	router := mux.NewRouter()
 	subrouter := router.PathPrefix("/api/v1").Subrouter() // make a sub router
 
+	// email service
+	emailStore := email.NewStore(s.fireStoreClient)
+	emailHandler := email.NewHandler(emailStore)
+	emailHandler.RegisteredRoutes(subrouter)
 	// user service
 	userStore := users.NewStore(s.fireStoreClient)
-	userHandler := users.NewHandler(userStore)
+	userHandler := users.NewHandler(userStore, emailStore)
 	userHandler.RegisteredRoutes(subrouter)
 	// upload service
 	uploadStore := uploads.NewStore(s.fireStoreClient)
@@ -41,10 +45,6 @@ func (s *APIServer) Run() error {
 	taskStore := tasks.NewStore(s.fireStoreClient)
 	taskHandler := tasks.NewHandler(taskStore)
 	taskHandler.RegisteredRoutes(subrouter)
-	// email service
-	emailStore := email.NewStore(s.fireStoreClient)
-	emailHandler := email.NewHandler(emailStore)
-	emailHandler.RegisteredRoutes(subrouter)
 
 	// cors
 	c := cors.New(cors.Options{

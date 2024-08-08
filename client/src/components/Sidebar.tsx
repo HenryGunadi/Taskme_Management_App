@@ -62,20 +62,20 @@ const Sidebar: React.FC = () => {
 			</div>
 
 			<ScrollArea className="w-full">
-				<Link to="/main/dashboard">
-					<div className="w-full transition  py-2 tablet:px-6  px-3 hover:underline">
+				<Link to="/main/dashboard" onClick={SidebarContext.handleIsSidebar}>
+					<div className="w-fit transition  py-2 tablet:px-6  px-3 hover:underline">
 						<h1>Dashboard</h1>
 					</div>
 				</Link>
 
-				<Link to="/main/task">
-					<div className="w-full transition  py-2 tablet:px-6  px-3 hover:underline">
+				<Link to="/main/task" onClick={SidebarContext.handleIsSidebar}>
+					<div className="w-fit transition  py-2 tablet:px-6  px-3 hover:underline">
 						<h1>Tasks</h1>
 					</div>
 				</Link>
 
-				<Link to="/main/notification">
-					<div className="w-full transition  py-2 tablet:px-6  px-3 hover:underline">
+				<Link to="/main/notification" onClick={SidebarContext.handleIsSidebar}>
+					<div className="w-fit transition  py-2 tablet:px-6  px-3 hover:underline">
 						<h1>Notification</h1>
 					</div>
 				</Link>

@@ -36,12 +36,20 @@ func main() {
 		}
 	}()
 
-	
 	ticker := time.NewTicker(24 * time.Hour)
 	defer ticker.Stop()
 	
+	emailStore := email.NewStore(client)
+	userEmails, err := emailStore.GetUserEmailsToSendEmail(ctx)
+	
 	for time := range ticker.C {
-		email.SendEmail(ctx, client)
+		if err := email.SendEmail(ctx, client, `
+		<p>You have unfinished tasks to do.</p>
+		<p>Click <a href="http://example.com/taskme">here</a> to view your tasks.</p>
+		`, userEmails); err != nil {
+		log.Printf("error sending email notification : %v", err)
+		}
+
 		tasks.HandleDeleteTask24Hour(ctx, time, client)
 	}
 }

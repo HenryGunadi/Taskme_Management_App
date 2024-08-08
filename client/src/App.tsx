@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import {useAuth} from './auth/Authentication';
 import ForgotPass from './components/ForgotPass';
 import OTP from './components/OTP';
+import ChangePass from './components/ChangePass';
 
 type unProtectedRouteType = {
 	page: string;
@@ -25,6 +26,10 @@ function App() {
 			page: 'OTP',
 			link: '/OTP',
 		},
+		{
+			page: 'changePassword',
+			link: '/changePassword',
+		},
 	];
 
 	const location = useLocation();
@@ -42,6 +47,7 @@ function App() {
 				<Route path="/register" element={<Register />} />
 				<Route path="/forgotPassword" element={<ForgotPass />} />
 				<Route path="/OTP" element={<OTP />} />
+				<Route path="/changePassword" element={<ChangePass />} />
 				<Route path="/main/*" element={<Dashboard />} />
 			</Routes>
 		</div>

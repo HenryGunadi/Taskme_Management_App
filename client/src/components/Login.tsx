@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import {LoginUserPayload} from './Types';
 import {Alert, LinearProgress} from '@mui/material';
@@ -81,9 +81,9 @@ const Login: React.FC = () => {
 				<img src={images.target} alt="" className="w-8 h-auto object-cover " style={{imageRendering: 'auto'}} />
 			</div>
 			{/* login page */}
-			<div className="w-1/2 h-3/4  flex rounded-lg shadow-lg p-4 text-slate-700">
-				<div className="w-1/2 flex flex-col justify-center text-center">
-					<h1 className="font-medium mb-4 text-base">Welcome Back</h1>
+			<div className="w-full laptop:w-1/2 h-3/4  flex rounded-lg shadow-lg p-4 text-slate-700">
+				<div className="w-full laptop:w-1/2 flex flex-col justify-center text-center">
+					<h1 className="mb-4 text-lg font-bold">Welcome Back</h1>
 					<form action="" className="flex justify-center flex-col gap-2 text-sm items-center w-full" onSubmit={handleLogin}>
 						<input
 							type="text"
@@ -104,13 +104,11 @@ const Login: React.FC = () => {
 							required
 						/>
 						<div className="w-3/4 text-start ">
-							<a href="" className="">
-								Forgot password ?
-							</a>
+							<Link to={'/forgotPassword'}>Forgot password ?</Link>
 						</div>
 
 						<button
-							className="block text-base mt-2 px-3 py-2 w-3/4 rounded-lg font-medium mb-2 text-white bg-indigo-500"
+							className="block text-base mt-5 px-3 py-2 w-3/4 rounded-lg font-medium mb-2 text-white bg-indigo-500"
 							type="submit"
 							onClick={handleAlert}
 						>
@@ -128,7 +126,7 @@ const Login: React.FC = () => {
 				</div>
 
 				{/* pictures */}
-				<div className="w-1/2 h-full flex items-center">
+				<div className="w-1/2 h-full laptop:flex items-center hidden">
 					<img src={images.task} alt="" className="w-full h-auto object-cover object-center" />
 				</div>
 			</div>

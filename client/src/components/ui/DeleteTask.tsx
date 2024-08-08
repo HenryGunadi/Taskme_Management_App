@@ -53,9 +53,7 @@ const DeleteTask: React.FC<FinishTaskProps> = ({taskID}) => {
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Remove task?</AlertDialogTitle>
-					<AlertDialogDescription>
-						Do you want to delete this task? It will be removed from your list, but you can add it back whenever you're ready.
-					</AlertDialogDescription>
+					<AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>

@@ -120,6 +120,34 @@ func (s *Store) GetUserByID(ctx context.Context, userID string) (*types.User, er
 	return user, nil
 }
 
+func (s *Store) ForgotPassword(ctx context.Context, payload types.ForgotPassPayload, newPassHashed string) error {
+	iter := s.fireStoreClient.Collection("users").Where("Email", "==", payload.Email).Documents(ctx)
+	defer iter.Stop()
+
+
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+
+		if err != nil {
+			return err
+		}
+
+		_, err = doc.Ref.Update(ctx, []firestore.Update{
+			{
+				Path: "Password",
+				Value: newPassHashed,
+			},
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 
 
