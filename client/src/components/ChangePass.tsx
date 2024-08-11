@@ -1,8 +1,6 @@
-import {useCommandState} from 'cmdk';
 import React, {useEffect, useState} from 'react';
 import {ValidateMsgInterface} from './Types';
 import images from '../assets/image';
-import {Eye, Images, UserMinus} from 'lucide-react';
 import axios from 'axios';
 import {backendUrl} from './Login';
 import {useNavigate} from 'react-router-dom';
@@ -22,7 +20,7 @@ const ChangePass: React.FC = () => {
 	const [newPass, setNewPass] = useState<string>('');
 	const [confirmPass, setConfirmPass] = useState<string>('');
 	const [isSame, setIsSame] = useState<boolean>(false);
-	const [isChangePass, setIsChangePass] = useState<boolean>(false);
+	const [_, setIsChangePass] = useState<boolean>(false);
 	const [isEyeOff, setIsEyeOff] = useState<boolean>(true);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
@@ -146,7 +144,7 @@ const ChangePass: React.FC = () => {
 
 	return (
 		<div className="w-full h-full flex justify-center items-center text-sm">
-			<div className="w-fit h-fit flex flex-col rounded-lg shadow-lg p-8">
+			<div className="w-fit h-fit flex flex-col rounded-lg laptop:shadow-lg p-8">
 				<div className="w-full flex justify-center">
 					<i className="fa-solid fa-key text-lg text-white bg-indigo-500 rounded-md w-11 h-11 flex justify-center items-center"></i>
 				</div>
@@ -184,7 +182,7 @@ const ChangePass: React.FC = () => {
 							/>
 						</div>
 
-						<ul style={{listStyleType: 'disc'}} className="ml-5 text-slate-600 mb-3">
+						<ul style={{listStyleType: 'disc'}} className="ml-5 text-slate-600 mb-3 mt-2">
 							{validateMsg.map((item: any, index: number) => (
 								<li className={item.error === true ? 'text-red-500' : ''} key={index}>
 									{item.errorMsg}

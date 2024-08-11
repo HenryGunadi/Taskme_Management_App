@@ -1,7 +1,7 @@
 import {DashboardContext} from './Dashboard';
 import FileUpload from './FileUpload';
 import {DashboardContextType, UserSettingsCtx} from './Types';
-import {useContext, useEffect} from 'react';
+import {useContext} from 'react';
 import {FileInterface, FileUploadContext, UpdateUserSettingCtx} from './UserProfile';
 
 const ProfileSettings: React.FC = () => {

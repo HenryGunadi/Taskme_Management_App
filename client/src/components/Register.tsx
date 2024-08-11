@@ -30,7 +30,7 @@ const Register: React.FC = () => {
 		}
 
 		try {
-			const response = await axios.post(`${backendBaseUrl}/register`, formData);
+			await axios.post(`${backendBaseUrl}/register`, formData);
 
 			window.alert('Sign up successful');
 			navigateToLogin();

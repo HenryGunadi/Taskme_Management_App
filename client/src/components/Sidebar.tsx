@@ -6,7 +6,6 @@ import {ScrollArea} from './ui/scroll-area';
 import {useContext, useState} from 'react';
 import {DashboardContext} from './Dashboard';
 import {DashboardContextType, SidebarLinks} from './Types';
-import {dividerClasses} from '@mui/material';
 
 const Sidebar: React.FC = () => {
 	const navigate = useNavigate();

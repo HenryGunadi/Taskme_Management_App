@@ -130,15 +130,6 @@ const UserProfile: React.FC = () => {
 							<img src={images.lockGray} alt="" className="w-4" />
 							<h1 className="hover:underline transition hover:cursor-pointer duration-300">Password</h1>
 						</div>
-						<div
-							className="py-2 px-4 hover:cursor-pointer flex gap-2"
-							onClick={() => {
-								navigateTo(userRoutes[2].route);
-							}}
-						>
-							<img src={images.notification} alt="" className="w-4" />
-							<h1 className="hover:underline transition hover:cursor-pointer duration-300">Notifications</h1>
-						</div>
 					</div>
 
 					{/* main settings */}

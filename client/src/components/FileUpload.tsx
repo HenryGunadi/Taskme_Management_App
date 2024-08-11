@@ -42,7 +42,7 @@ const FileUpload: React.FC = () => {
 				url: url,
 			};
 
-			const response = await axios.post(`${backendUrl}/uploads`, metadata, {
+			await axios.post(`${backendUrl}/uploads`, metadata, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 					'Content-Type': 'application/json',

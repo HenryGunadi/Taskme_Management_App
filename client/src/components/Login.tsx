@@ -81,7 +81,7 @@ const Login: React.FC = () => {
 				<img src={images.target} alt="" className="w-8 h-auto object-cover " style={{imageRendering: 'auto'}} />
 			</div>
 			{/* login page */}
-			<div className="w-full laptop:w-1/2 h-3/4  flex rounded-lg shadow-lg p-4 text-slate-700">
+			<div className="w-full laptop:w-2/3 h-3/4  flex rounded-lg  laptop:shadow-lg p-8 text-slate-700">
 				<div className="w-full laptop:w-1/2 flex flex-col justify-center text-center">
 					<h1 className="mb-4 text-lg font-bold">Welcome Back</h1>
 					<form action="" className="flex justify-center flex-col gap-2 text-sm items-center w-full" onSubmit={handleLogin}>

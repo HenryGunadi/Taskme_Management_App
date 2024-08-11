@@ -9,7 +9,7 @@ import {TaskContext} from '../Task';
 const TaskContainer: React.FC<TaskContainerProps> = ({data}) => {
 	const date = new Date(data.dueDate && data.dueDate * 1000);
 	const {toggleEdited} = useContext(DashboardContext) as DashboardContextType;
-	const {toggleComplete, isCompleted} = useContext(TaskContext) as TaskType;
+	const {toggleComplete} = useContext(TaskContext) as TaskType;
 
 	return (
 		<div className="w-full rounded-lg shadow-sm flex flex-col p-4 bg-white my-4 h-fit">

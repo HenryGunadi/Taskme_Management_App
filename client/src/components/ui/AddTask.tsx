@@ -70,7 +70,7 @@ const AddTask: React.FC<{data: TaskDataFetch | null}> = ({data}) => {
 		if (token) {
 			try {
 				const taskID = data?.taskID;
-				const response = await axios.patch(`${backendUrl}/task/update/${taskID}`, datas, {
+				await axios.patch(`${backendUrl}/task/update/${taskID}`, datas, {
 					headers: {
 						Authorization: `Bearer ${token}`,
 						'Content-Type': 'application/json',

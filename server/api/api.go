@@ -43,12 +43,12 @@ func (s *APIServer) Run() error {
 	uploadHandler.RegisteredRoutes(subrouter)
 	// task service
 	taskStore := tasks.NewStore(s.fireStoreClient)
-	taskHandler := tasks.NewHandler(taskStore)
+	taskHandler := tasks.	NewHandler(taskStore)
 	taskHandler.RegisteredRoutes(subrouter)
 
 	// cors
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowedOrigins:   []string{"*"},
         AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
         AllowedHeaders:   []string{"Authorization", "Content-Type"},
         AllowCredentials: true,

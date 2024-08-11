@@ -12,8 +12,6 @@ import Task from './Task';
 import AddTask from './ui/AddTask';
 import Notification from './Notification';
 import AddTaskButton from './ui/AddTaskButton';
-import {setISODay} from 'date-fns';
-import images from '../assets/image';
 
 export const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
@@ -172,7 +170,7 @@ const Dashboard: React.FC = () => {
 		dueDate: -1,
 		status: null,
 	});
-	const [time, setTime] = useState<TimeType>({
+	const [_, setTime] = useState<TimeType>({
 		day: -1,
 		hour: -1,
 		minute: -1,
@@ -362,7 +360,10 @@ const Dashboard: React.FC = () => {
 				</div>
 
 				{/* overlay effect command*/}
-				<div className={`fixed inset-0 ${isSidebars ? 'bg-black opacity-50' : 'hidden'} w-full h-full`} onClick={toggleOffCommand}></div>
+				<div
+					className={`fixed inset-0 ${isSidebars ? 'bg-black opacity-50' : 'hidden'} w-full h-full laptop:hidden`}
+					onClick={toggleOffCommand}
+				></div>
 
 				{/* alert ui */}
 				{alert.isLoading === true && (
