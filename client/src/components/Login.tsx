@@ -5,7 +5,7 @@ import {LoginUserPayload} from './Types';
 import {Alert, LinearProgress} from '@mui/material';
 import images from '../assets/image';
 
-export const backendUrl: string = 'http://localhost:8080/api/v1';
+export const backendUrl: string = 'https://taskme-management-app-backend-gfob7i3tua-et.a.run.app/api/v1';
 
 const Login: React.FC = () => {
 	// React Router

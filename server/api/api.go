@@ -48,7 +48,7 @@ func (s *APIServer) Run() error {
 
 	// cors
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
+		AllowedOrigins:   []string{"https://taskme-management-app-client-gfob7i3tua-et.a.run.app"},
         AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
         AllowedHeaders:   []string{"Authorization", "Content-Type"},
         AllowCredentials: true,

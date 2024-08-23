@@ -3,9 +3,6 @@ import {RegisterUserPayload, ValidateMsgInterface} from './Types';
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
-// path prefix to backend
-const backendBaseUrl: string = 'http://localhost:8080/api/v1';
-
 const Register: React.FC = () => {
 	// react router dom
 	const navigate = useNavigate();
@@ -30,7 +27,7 @@ const Register: React.FC = () => {
 		}
 
 		try {
-			await axios.post(`${backendBaseUrl}/register`, formData);
+			await axios.post(`https://taskme-management-app-backend-gfob7i3tua-et.a.run.app/api/v1/register`, formData);
 
 			window.alert('Sign up successful');
 			navigateToLogin();
